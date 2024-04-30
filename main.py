@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-from flask import Flask, request, render_template
-import json
-from waitress import serve
+from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/index')
-def index():
-    print("hello")
-    return render_template('3.html')
+@app.route('/')
+def hello():
+    return 'Hello, this is a test page!'
 
-serve(app, host="0.0.0.0", port=8080)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
