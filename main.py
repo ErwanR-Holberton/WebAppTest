@@ -7,10 +7,13 @@ app = Flask(__name__)
 def hello():
     return 'Hello, this is a test page!'
 
+@app.route('/<path:other>')
+def catch_all(other):
+    return 'You accessed: %s' % other
 
 @app.route('/index')
 def index():
     return render_template('3.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(port=8080)
