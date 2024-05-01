@@ -8,7 +8,7 @@ def hello():
     return 'V1'
 
 @app.route('/flan')
-def hello():
+def flan():
     return 'flan de pate'
 
 @app.route('/index')
