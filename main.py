@@ -5,11 +5,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return 'Hello, this is a test page!'
+    return 'V1'
 
 @app.route('/<path:other>')
 def catch_all(other):
-    return 'You accessed: %s' % other
+    return 'V1 You accessed: %s' % other
 
 @app.route('/index')
 def index():
