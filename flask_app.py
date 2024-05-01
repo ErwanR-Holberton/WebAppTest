@@ -9,9 +9,11 @@ def log(message):
     with open('request_logs.log', 'a') as f:
         f.write(message + '\n')
 
+print("server start")
 
 @app.route('/')
 def hello():
+    print("root call")
      # Get the IP address of the client
     ip_address = request.remote_addr
 
@@ -29,6 +31,7 @@ def hello():
     except geoip2.errors.AddressNotFoundError:
         log_message = f"IP Address: {ip_address}, Location not found"
     log(log_message)
+    print("no error")
     return 'V1'
 
 @app.route('/flan')
