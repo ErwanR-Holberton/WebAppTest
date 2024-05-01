@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, request
+import subprocess
+
+# Install geoip2 package using pip
+subprocess.run(["pip3", "install", "geoip2"], check=True)
+
+
 import geoip2.database
 
 app = Flask(__name__)
