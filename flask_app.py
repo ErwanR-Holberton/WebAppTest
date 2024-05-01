@@ -7,6 +7,10 @@ app = Flask(__name__)
 def hello():
     return 'V1'
 
+@app.route('/flan')
+def hello():
+    return 'flan de pate'
+
 @app.route('/<path:other>')
 def catch_all(other):
     return 'V1 You accessed: %s' % other
