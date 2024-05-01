@@ -11,10 +11,6 @@ def hello():
 def hello():
     return 'flan de pate'
 
-@app.route('/<path:other>')
-def catch_all(other):
-    return 'V1 You accessed: %s' % other
-
 @app.route('/index')
 def index():
     return render_template('3.html')
