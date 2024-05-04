@@ -1,0 +1,12 @@
+http://localhost:8080/
+unsupported operand type(s) for +: 'EnvironHeaders' and 'str'
+http://localhost:8080/flutter
+unsupported operand type(s) for +: 'EnvironHeaders' and 'str'
+http://localhost:8080/WebAppTest/templates/flutter_bootstrap.js
+unsupported operand type(s) for +: 'EnvironHeaders' and 'str'
+http://localhost:8080/WebAppTest/templates/favicon.png
+unsupported operand type(s) for +: 'EnvironHeaders' and 'str'
+http://localhost:8080/WebAppTest/templates/manifest.json
+unsupported operand type(s) for +: 'EnvironHeaders' and 'str'
+http://localhost:8080/flutter
+unsupported operand type(s) for +: 'EnvironHeaders' and 'str'

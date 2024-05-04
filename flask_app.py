@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 
 app = Flask(__name__)
 
@@ -8,35 +8,19 @@ def log(message):
         print(message)
         f.write(message + "\n")
 
-@app.before_request
+"""@app.before_request
 def log_request_info():
     try:
         log_message = "Request Info: "
-        """log(f"Request: {str(request)}, Method: {request.method}, URL: {request.url}, Headers: {request.headers}, Remote Address: {request.remote_addr}, Form Data: {request.form}, Query Parameters: {request.args}, JSON Data: {request.json}, Cookies: {request.cookies}, Files: {request.files}, Path: {request.path}, Full Path: {request.full_path}, Scheme: {request.scheme}, Base URL: {request.base_url}, User Agent: {request.user_agent}")
-        """
+
         log(request.url)
         log(request.headers)
         log(request.remote_addr)
         log(request.form)
         log(request.method)
 
-        """for attr in dir(request):                               # Iterate over attributes of the request object
-
-            if not attr.startswith('_'):                        # Skip private attributes and methods
-
-
-                if attr == 'json':
-                    continue
-                value = getattr(request, attr)                  # Get the value of the attribute
-                if value is None:
-                    continue
-                print(attr, value)
-                log_message += "{}: {},".format(attr, value)    # Add the attribute and its value to the log message
-
-        log(str(log_message))"""
-
     except Exception as e:
-        log(str(e))
+        log(str(e))"""
 
 @app.route('/')
 def hello():
@@ -53,7 +37,13 @@ def index():
 
 @app.route('/flutter')
 def flutter():
-    return render_template('index.html')
+    print("main")
+    return send_from_directory('./templates', 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    print(filename)
+    return send_from_directory('./templates', filename)
 
 if __name__ == '__main__':
     app.run(port=8080)
