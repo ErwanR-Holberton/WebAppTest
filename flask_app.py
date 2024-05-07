@@ -45,5 +45,9 @@ def serve_static(filename):
     print(filename)
     return send_from_directory('./templates', filename)
 
+@app.route('/gpt')
+def gpt():
+    return render_template('gpt.html')
+
 if __name__ == '__main__':
     app.run(port=8080)
