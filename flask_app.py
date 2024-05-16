@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, request, send_from_directory
+import folium
 
 app = Flask(__name__)
 
