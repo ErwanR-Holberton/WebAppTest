@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map with Leaflet.js</title>
+  <!-- Include Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- Include Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- CSS for the map container -->
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Create a container for the map -->
+  <div id="map"></div>
+
+  <script>
+    // Initialize the map
+    var map = L.map('map').setView([48.0703, -0.7705], 13); // Centered around Laval, Mayenne, France
+
+    // Add the base map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add a marker for Laval, Mayenne, France
+    var lavalMarker = L.marker([48.0703, -0.7705]).addTo(map);
+    lavalMarker.bindPopup("<b>Laval, Mayenne, France</b>").openPopup();
+
+    // Check if the browser supports geolocation
+    if ("geolocation" in navigator) {
+      // Get the user's current position
+      navigator.geolocation.getCurrentPosition(function(position) {
+        // Create a marker for the user's location
+        var userMarker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
+        userMarker.bindPopup("<b>Your Location</b>").openPopup();
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  </script>
+</body>
+</html>

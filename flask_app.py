@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, request, send_from_directory
-import folium
 
 app = Flask(__name__)
 
@@ -49,6 +48,10 @@ def serve_static(filename):
 @app.route('/gpt')
 def gpt():
     return render_template('gpt.html')
+
+@app.route('/youarehere')
+def youarehere():
+    return render_template('youarehere.html')
 
 if __name__ == '__main__':
     app.run(port=8080)
