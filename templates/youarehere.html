@@ -43,17 +43,13 @@
         return response.json();
     })
     .then(data => {
-        console.log(data);
         if (data) {
             console.log("hello");
             data.forEach(function(point) {
-
-                console.log(point);
                 var lat = point.lat;
                 var lon = point.lon;
                 var tags = point.tags;
 
-                // Create marker
                 var marker = L.marker([lat, lon]).addTo(map);
 
                 // Bind popup
