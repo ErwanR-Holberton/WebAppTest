@@ -55,7 +55,7 @@ def youarehere():
 
 @app.route('/laval')
 def laval():
-    with open('/home/ERHBTN/WebAppTest/Amenities.txt', 'r') as file:
+    with open('/home/ERHBTN/WebAppTest/Laval.json', 'r') as file:
         data = file.read()
     return data
 
