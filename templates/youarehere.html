@@ -48,7 +48,7 @@
             data.forEach(function(point) {
                 var lat = point.lat;
                 var lon = point.lon;
-                var tags = point.tags;
+                var tags = JSON.stringify(point.tags);
 
                 var marker = L.marker([lat, lon]).addTo(map);
 
