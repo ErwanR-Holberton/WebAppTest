@@ -44,9 +44,9 @@
     })
     .then(data => {
         console.log(data);
-        if (data && data.element) {
+        if (data) {
             console.log("hello");
-            data.element.forEach(function(point) {
+            data.forEach(function(point) {
 
                 console.log(point);
                 var lat = point.lat;
