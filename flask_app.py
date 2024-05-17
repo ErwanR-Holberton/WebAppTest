@@ -53,5 +53,11 @@ def gpt():
 def youarehere():
     return render_template('youarehere.html')
 
+@app.route('/laval')
+def laval():
+    with open('Amenities.txt', 'r') as file:
+        data = file.read()
+    return data
+
 if __name__ == '__main__':
     app.run(port=8080)
