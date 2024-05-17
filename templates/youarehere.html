@@ -43,8 +43,11 @@
         return response;
     })
     .then(data => {
+        console.log(data);
         if (data && data.element) {
             data.element.forEach(function(point) {
+
+                console.log(point);
                 var lat = point.lat;
                 var lon = point.lon;
                 var tags = point.tags;
