@@ -35,6 +35,30 @@
     var lavalMarker = L.marker([48.0703, -0.7705]).addTo(map);
     lavalMarker.bindPopup("<b>Laval, Mayenne, France</b>").openPopup();
 
+    fetch('https://erhbtn.pythonanywhere.com/laval')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.element) {
+            data.element.forEach(function(point) {
+                var lat = point.lat;
+                var lon = point.lon;
+                var tags = point.tags;
+
+                // Create marker
+                var marker = L.marker([lat, lon]).addTo(map);
+
+                // Bind popup
+                marker.bindPopup("<b>" + tags + "</b>").openPopup();
+            });
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
     // Check if the browser supports geolocation
     if ("geolocation" in navigator) {
       // Get the user's current position
