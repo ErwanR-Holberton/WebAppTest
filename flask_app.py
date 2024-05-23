@@ -96,17 +96,20 @@ def Chat():
 def handle_message(msg):
     new_msg = str(users[request.sid]) + ': ' + msg
     print(new_msg)
+    log2(new_msg)
     send(new_msg, broadcast=True)
 
 @socketio.on('connect')
 def handle_connect():
     username = request.args.get('username')
     users[request.sid] = username
+    log2("connection: " + str(username) + " " + str(request.sid) + "</br>")
     emit('user_list', list(users.values()), broadcast=True)
 
 @socketio.on('disconnect')
 def handle_disconnect():
     if request.sid in users:
+        log2("disconnection: " + str(users[request.sid]) + " " + str(request.sid) + "</br>")
         del users[request.sid]
         emit('user_list', list(users.values()), broadcast=True)
 
