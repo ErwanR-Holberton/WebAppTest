@@ -7,11 +7,40 @@ app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
 users = {}  # Dictionary to keep track of connected users
+history = ""
 
 def log(message):
     with open('request_logs.log', 'a') as f:
         print(message)
         f.write(message + "\n")
+
+def log2(object1, object2=""):
+    global history
+    msg = str(object1)
+    if object2 != "":
+        msg += ": " + str(object2)
+        if str(object2) not in ["None", "True", "False", "", "<"]:
+            if not str(object2).startswith('<'):
+                print(msg)
+                history += msg + "</br>"
+    else:
+        print(msg)
+        history += msg + "</br>"
+
+@app.before_request
+def history_log():
+    if request.path != "/history":
+        log2(str(request.method) +" " + str(request.url))
+        log2(str(request.host) +" " + str(request.host_url))
+        log2("from: " + str(request.remote_addr))
+        log2("Route: " + str(request.path))
+        """    for attr in dir(request):
+            if not attr.startswith('_'):
+                try:
+                    log2(attr, getattr(request, attr))
+                except:
+                    pass"""
+        log2("")
 
 """@app.before_request
 def log_request_info():
@@ -79,6 +108,10 @@ def handle_disconnect():
     if request.sid in users:
         del users[request.sid]
         emit('user_list', list(users.values()), broadcast=True)
+
+@app.route('/history')
+def history_route():
+    return history
 
 @app.route('/laval')
 def laval():
