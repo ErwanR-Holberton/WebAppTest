@@ -10,6 +10,7 @@
 
             socket.on('connect', function() {
                 socket.send(username + ' has connected!');
+				console.log("connected");
             });
 
             socket.on('message', function(msg) {
