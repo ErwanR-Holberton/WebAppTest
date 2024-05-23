@@ -34,6 +34,7 @@ def history_log():
         log2(str(request.host) +" " + str(request.host_url))
         log2("from: " + str(request.remote_addr))
         log2("Route: " + str(request.path))
+        log2("Data: " + str(request.get_data()))
         """    for attr in dir(request):
             if not attr.startswith('_'):
                 try:
