@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask, render_template, request, send_from_directory
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 
@@ -124,5 +126,5 @@ def laval():
     return data
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000, use_reloader=False)
     """app.run(port=8080)"""
