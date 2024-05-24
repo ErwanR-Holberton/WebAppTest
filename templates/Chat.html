@@ -6,7 +6,7 @@
     <script type="text/javascript" charset="utf-8">
         document.addEventListener('DOMContentLoaded', function() {
             var username = prompt("Enter your username");
-            var socket = io.connect('https://' + document.domain + ':' + location.port, {query: "username=" + username});
+            var socket = io.connect('https://erhbtn.pythonanywhere.com/history');
 
             socket.on('connect', function() {
                 socket.send(username + ' has connected!');
