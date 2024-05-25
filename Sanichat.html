@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Client</title>
+    <style>
+        #chat {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        #messages {
+            height: 300px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        #messageInput {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        #sendButton {
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <div id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Enter your message">
+        <button id="sendButton">Send</button>
+    </div>
+
+    <script>
+        let lastIndex = 0;
+        const messagesDiv = document.getElementById("messages");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        async function pollMessages() {
+            try {
+                const response = await fetch(`/poll?last_index=${lastIndex}`);
+                const data = await response.json();
+
+                if (data.messages.length > 0) {
+                    data.messages.forEach(message => {
+                        const messageDiv = document.createElement("div");
+                        messageDiv.textContent = message;
+                        messagesDiv.appendChild(messageDiv);
+                    });
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    lastIndex = data.new_index;
+                }
+            } catch (error) {
+                console.error("Polling error:", error);
+            }
+
+            // Continue polling
+            setTimeout(pollMessages, 1000);
+        }
+
+        sendButton.addEventListener("click", async () => {
+            const message = messageInput.value;
+            if (message) {
+                await fetch('/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+                messageInput.value = "";
+            }
+        });
+
+        messageInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                sendButton.click();
+            }
+        });
+
+        // Start polling
+        pollMessages();
+    </script>
+</body>
+</html>

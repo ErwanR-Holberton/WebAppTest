@@ -1,36 +1,37 @@
 #!/usr/bin/env python3
-from sanic import Sanic
+from sanic import Sanic, response
 from sanic.response import json
-from websockets.exceptions import ConnectionClosedError
-import websockets
+from sanic.request import Request
 import asyncio
 
-app = Sanic("ChatServer")
-clients = set()
+app = Sanic("LongPollingChat")
+messages = []
 
 @app.route('/')
 async def index(request):
-    return json({"message": "Welcome to the chat server!"})
+    return await response.file('Sanichat.html')
 
-async def chat_handler(websocket, path):
-    clients.add(websocket)
-    try:
-        async for message in websocket:
-            for client in clients:
-                if client != websocket:
-                    await client.send(message)
-    except ConnectionClosedError:
-        pass
-    finally:
-        clients.remove(websocket)
+@app.route('/send', methods=['POST'])
+async def send_message(request: Request):
+    message = request.json.get('message')
+    if message:
+        messages.append(message)
+    return json({"status": "Message received"})
 
-async def start_websocket_server():
-    server = await websockets.serve(chat_handler, "0.0.0.0", 8001)
-    await server.wait_closed()
+@app.route('/poll')
+async def poll_messages(request: Request):
+    last_index = int(request.args.get('last_index', 0))
+    new_messages = messages[last_index:]
 
-@app.listener('after_server_start')
-async def websocket_server(app, loop):
-    loop.create_task(start_websocket_server())
+    if new_messages:
+        return json({"messages": new_messages, "new_index": len(messages)})
+
+    # If no new messages, wait for a new message
+    while True:
+        await asyncio.sleep(1)
+        new_messages = messages[last_index:]
+        if new_messages:
+            return json({"messages": new_messages, "new_index": len(messages)})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000)
