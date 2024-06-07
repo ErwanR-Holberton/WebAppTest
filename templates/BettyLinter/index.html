@@ -17,7 +17,7 @@
     <script>
         function validateCode() {
             const code = document.getElementById('codeInput').value;
-            fetch('http://127.0.0.1:8000/BettyLinter/validate', {
+            fetch('http://erhbtn.pythonanywhere.com/BettyLinter/validate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
