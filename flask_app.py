@@ -7,7 +7,7 @@ import importlib
 from Apps.BettyLinter import routes as routebetty"""
 
 prefixes = ""
-server_ip = "127.0.0.1:8000"
+server_ip = "erhbtn.pythonanywhere.com"
 
 print(__file__, "sdftygsyhsdiuqxljlkwchgfchgjhkjkxfvxdghcnj,wxkhjhvcbjxkxckhgwxjhkjlcjwxjgcjkwxjlc")
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
