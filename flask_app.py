@@ -14,7 +14,7 @@ for filename in os.listdir('./Apps'):  # Iterate over each file in the folder
 
     if filename.endswith('.py') and filename != '__init__.py':                              # Check if the file is a Python module
         module_name = filename[:-3]                                                         # Remove the .py extension
-        module = importlib.import_module(f'{'Apps'.replace("/", ".")}.{module_name}')  # Import the module dynamically
+        module = importlib.import_module(f"{'Apps'.replace('/', '.')}.{module_name}")       # Import the module dynamically
 
         if hasattr(module, 'routes') and hasattr(module, 'prefix'):
             module.routes()                 # Call the routes function
