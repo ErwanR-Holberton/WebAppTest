@@ -12,7 +12,7 @@ def file_save(text):
 def run_betty_style_check(text):
     routebetty = os.path.join("..", "Betty", "betty-style.pl")
     file_save(text)
-    command = "{} file.c".format(routebetty)  # Escape single quotes in the text
+    command = "{} file.c 2>&1".format(routebetty)  # Escape single quotes in the text
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     print(result)
     return result.stdout
@@ -20,7 +20,7 @@ def run_betty_style_check(text):
 def run_betty_doc_check(text):
     routebetty = os.path.join("..", "Betty", "betty-doc.pl")
     file_save(text)
-    command = "{} file.c".format(routebetty)  # Escape single quotes in the text
+    command = "{} file.c 2>&1".format(routebetty)  # Escape single quotes in the text
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     print(result)
     return result.stdout
