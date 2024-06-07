@@ -37,5 +37,5 @@ def routes():
 
         betty = run_betty_style_check(code)
         betty_doc = run_betty_doc_check(code)
-        result = {style: betty, doc: betty_doc}
+        result = {"style": betty, "doc": betty_doc}
         return jsonify(result=result)
