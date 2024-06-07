@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Validator</title>
+</head>
+<body>
+    <h1>Code Validator</h1>
+    <form id="codeForm">
+        <label for="codeInput">Enter your code:</label><br>
+        <textarea id="codeInput" name="code" rows="10" cols="50"></textarea><br>
+        <button type="button" onclick="validateCode()">Validate</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        function validateCode() {
+            const code = document.getElementById('codeInput').value;
+            fetch('http://127.0.0.1:8000/BettyLinter/validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').innerText = data.result;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
