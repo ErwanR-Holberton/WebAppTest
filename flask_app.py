@@ -3,11 +3,12 @@ from FlaskApp import *
 import os
 import importlib
 
+
+
 """from Apps.App1 import routes as routes1
 from Apps.BettyLinter import routes as routebetty"""
 
 prefixes = ""
-server_ip = "erhbtn.pythonanywhere.com"
 
 print(__file__, "sdftygsyhsdiuqxljlkwchgfchgjhkjkxfvxdghcnj,wxkhjhvcbjxkxckhgwxjhkjlcjwxjgcjkwxjlc")
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
@@ -21,7 +22,7 @@ for filename in os.listdir('./Apps'):  # Iterate over each file in the folder
 
         if hasattr(module, 'routes') and hasattr(module, 'prefix'):
             module.routes()                 # Call the routes function
-            addr = f'http://{server_ip}/{ module.prefix}'
+            addr = f'http://{server_ip}{ module.prefix}'
             prefixes += f'<a href="{addr}">{addr}</a><br>'
 
 @app.route('/')

@@ -2,16 +2,25 @@ from FlaskApp import *
 prefix = "/BettyLinter/"
 
 import subprocess
+import os
+
+
+def file_save(text):
+    with open("file.c", "w+") as file:
+        file.write(text)
 
 def run_betty_style_check(text):
-    command = "echo '{}' | betty".format(text.replace("'", "\\'"))  # Escape single quotes in the text
+    routebetty = os.path.join("..", "Betty", "betty-style.pl")
+    file_save(text)
+    command = "{} file.c".format(routebetty)  # Escape single quotes in the text
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    print(result)
     return result.stdout
 
 def routes():
     @app.route(prefix)
     def indexbetty():
-        return render_template(prefix + "index.html")
+        return render_template(prefix + "index.html", address=server_ip)
 
     @app.route(prefix + 'validate', methods=['POST'])
     def templatebetty():
@@ -19,5 +28,4 @@ def routes():
         code = data.get('code', '')
 
         betty = run_betty_style_check(code)
-        print(code)
         return jsonify(result=betty)
