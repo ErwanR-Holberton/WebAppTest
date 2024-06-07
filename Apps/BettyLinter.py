@@ -17,6 +17,14 @@ def run_betty_style_check(text):
     print(result)
     return result.stdout
 
+def run_betty_doc_check(text):
+    routebetty = os.path.join("..", "Betty", "betty-doc.pl")
+    file_save(text)
+    command = "{} file.c".format(routebetty)  # Escape single quotes in the text
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    print(result)
+    return result.stdout
+
 def routes():
     @app.route(prefix)
     def indexbetty():
@@ -28,4 +36,6 @@ def routes():
         code = data.get('code', '')
 
         betty = run_betty_style_check(code)
-        return jsonify(result=betty)
+        betty_doc = run_betty_doc_check(code)
+        result = {style: betty, doc: betty_doc}
+        return jsonify(result=result)

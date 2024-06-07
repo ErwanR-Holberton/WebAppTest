@@ -90,7 +90,7 @@
             }
         }
 
-        #output {
+        #output_style, #output_doc {
             text-align: left;
             padding: 0 5rem;
         }
@@ -113,7 +113,8 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('output').innerText = data.result;
+                document.getElementById('output_style').innerText = data.result.style;
+                document.getElementById('output_doc').innerText = data.result.doc;
                 setLoaderState(false);
             })
             .catch(error => {
@@ -139,7 +140,8 @@
             <button type="button" onclick="validateCode()">Validate</button>
         </form>
         <div id="loader" class="disabled"></div>
-        <div id="output"></div>
+        <div id="output_style"></div>
+        <div id="output_doc"></div>
     </div>
 </body>
 </html>
