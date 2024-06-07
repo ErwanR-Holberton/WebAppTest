@@ -1,6 +1,13 @@
 from FlaskApp import *
 prefix = "/BettyLinter/"
 
+import subprocess
+
+def run_betty_style_check(text):
+    command = "echo '{}' | betty".format(text.replace("'", "\\'"))  # Escape single quotes in the text
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    return result.stdout
+
 def routes():
     @app.route(prefix)
     def indexbetty():
@@ -10,5 +17,7 @@ def routes():
     def templatebetty():
         data = request.get_json()
         code = data.get('code', '')
+
+        betty = run_betty_style_check(code)
         print(code)
-        return jsonify(result=code)
+        return jsonify(result=betty)
