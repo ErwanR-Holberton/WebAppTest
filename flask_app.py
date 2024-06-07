@@ -9,6 +9,9 @@ from Apps.BettyLinter import routes as routebetty"""
 prefixes = ""
 server_ip = "127.0.0.1:8000"
 
+print(__file__, "sdftygsyhsdiuqxljlkwchgfchgjhkjkxfvxdghcnj,wxkhjhvcbjxkxckhgwxjhkjlcjwxjgcjkwxjlc")
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
 
 for filename in os.listdir('./Apps'):  # Iterate over each file in the folder
 
