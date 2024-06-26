@@ -1,0 +1,42 @@
+<head>
+	<title>Pedantix_Clone</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index_style.css') }}">
+</head>
+<body>
+	<aside>side
+		<summary>summary</summary>
+	</aside>
+	<article>
+		<h1>Pédantix</h1>
+		<h2>Découvrez la page Wikipédia !</h2>
+
+		<form id="game_form" class="form">
+			<span id="pin">📍</span>
+			<div class="guessbox">
+				<input size="15" placeholder="Mot" autocorrect="off" autocapitalize="none" autocomplete="off" type="search" name="searchTerm" id="pedantix-guess" class="guess">
+				<div id="pedantix-previous" class="previous">⤺</div>
+			</div>
+			<input type="submit" value="Envoyer" id="pedantix-guess-btn" class="guess-btn">
+			<label id="pedantix-error" class="error"></label>
+		</form>
+
+		<div id="game">
+			{% set ns = namespace(counter=1) %}
+			{% for title, items in text %}
+				{% if loop.first %}
+					<h2>{{ title }}</h2>
+				{% else %}
+					<h4>{{ title }}</h4>
+				{% endif %}
+
+				<p class="game_paragraph">
+					{% for item in items %}
+						<span class="w" id="{{ ns.counter }}">{{ item }}</span>
+						{% set ns.counter = ns.counter + 1 %}
+					{% endfor %}
+				</p>
+
+			{% endfor %}
+		</div>
+	</article>
+</body>
