@@ -114,7 +114,7 @@ pedantix_game.new_game()
 
 @app.route(prefix)
 def hello_world():
-    return render_template('index.html', **pedantix_game.get_jinja_args())
+    return render_template(prefix + 'index.html', **pedantix_game.get_jinja_args())
 
 
 
