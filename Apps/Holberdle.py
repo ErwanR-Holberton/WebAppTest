@@ -18,4 +18,4 @@ def routes():
         names = []
         for user in data:
             name.append(user[0])
-        return names
+        return jsonify(names)
