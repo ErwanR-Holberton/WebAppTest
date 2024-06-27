@@ -1,13 +1,117 @@
 <head>
 	<title>Pedantix_Clone</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index_style.css') }}">
-	<link rel="stylesheet" type="text/css" href="index_style.css">
-	<link rel="stylesheet" type="text/css" href="Pedantix/index_style.css">
-	<link rel="stylesheet" type="text/css" href="templates/Pedantix/index_style.css">
-	<link rel="stylesheet" type="text/css" href="/home/ERHBTN/WebAppTest/templates/Pedantix/index_style.css">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/Pedantix/index_style.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='Pedantix/index_style.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for(filename='index_style.css') }}">
+	<style>
+		:root {
+			color-scheme: dark;
+			--back-bg: #A88588;
+			--back-shadow: #785558;
+			--body-edge: #7DA8B6;
+			--body-bg: #4D7886;
+			--body-shadow: #1D4856;
+			--antibody-edge: #BDE8F6;
+			--antibody-bg: #9DC8D6;
+			--header: #DDD;
+			--antiheader: #333;
+			--summary-edge: #FFE750;
+			--summary-bg: #FFD700;
+			--summary-shadow: #E7B700;
+			--summary-color: black;
+			--summary-link: darkgreen;
+			--dialog-bg: #666;
+			--dialog-shadow: #333;
+			--error: orange;
+			--success-bg: darkgreen;
+			--success-shadow: #004800;
+			--link: lightgreen;
+		}
+		body {
+			background-color: var(--back-bg);
+			display: flex;
+		}
+		aside {
+			flex: 1 0 0;
+		}
+		article {
+			flex: 4 0 0;
+			margin: 10px;
+			margin-bottom: 5px;
+			text-align: left;
+			background: var(--body-bg);
+			box-shadow: inset 2px 2px 1px var(--body-edge), 3px 3px 3px var(--back-shadow);
+			margin-top: -10px;
+			padding: 10px;
+			border-radius: 10px;
+		}
+		summary {
+			background-color: #FFD700;
+			box-shadow: inset 2px 2px 1px var(--summary-edge), 3px 3px 3px var(--back-shadow);
+			border-radius: 25px;
+			min-width: 15em;
+		}
+		#game {
+			font-family: sans-serif;
+			color: #202122;
+			background: #F8F9FA;
+			box-shadow: inset 2px 2px 2px #88898A, 2px 2px var(--body-edge);
+			border-radius: 10px;
+			margin-left: 2px;
+			padding-left: 1em;
+			padding-right: 1em;
+			padding-top: .1em;
+			padding-bottom: .1em;
+			user-select: none;
+			overflow: auto;
+		}
+		.form {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-left: .2em;
+			margin-right: .2em;
+			padding-top: .5em;
+			padding-bottom: .5em;
+			border-radius: 5px;
+		}
+		.previous {
+			position: absolute;
+			right: 0;
+			top: 0;
+			font-size: 1.2em;
+			padding-right: .4em;
+			user-select: none;
+			visibility: hidden;
+		}
+		h1 {
+			font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+			text-shadow: 2px 2px var(--antiheader);
+			color: var(--header);
+			text-align: center;
+		}
+		article > h2 {
+			font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+			text-shadow: 2px 2px var(--antiheader);
+			color: var(--header);
+			text-align: center;
+			font-size: 1.2em;
+		}
+		.game_paragraph {
+			display: inline;
+			margin: 0px;
+			padding: 0px;
+		}
+		.w {
+			background-color: rgb(248, 249, 250);
+			box-shadow: none;
+			color: rgb(32, 33, 34);
+			display: inline;
+			font-family: inherit;
+			font-size: inherit;
+			line-height: inherit;
+			margin: 0px;
+		}
+
+	</style>
 </head>
 <body>
 	<aside>side
