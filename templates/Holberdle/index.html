@@ -67,25 +67,55 @@
 		}
 
 		.child_good {
+			text-shadow: 0 0 2px #fff;
 			background-color: rgba(2, 209, 88, 0.801);
 			color: rgba(0, 0, 0, 1);
 			border-radius: 5px;
 			padding: 5px;
+			text-align: center;
 
 		}
 		.child_wrong {
+			text-shadow: 0 0 2px #fff;
 			background-color: rgba(216, 41, 41, 0.829);
 			color: rgba(0, 0, 0, 1);
 			border-radius: 5px;
 			padding: 5px;
+			text-align: center;
 
+		}
+		.child_minus {
+			text-shadow: 0 0 2px #fff;
+			background-color: rgba(216, 41, 41, 0.829);
+			color: rgba(0, 0, 0, 1);
+			border-radius: 5px;
+			padding: 5px;
+			text-align: center;
+			background-image: url("{{ url_for('static', filename='images/down-arrow.png') }}");
+			background-size: auto 100%;
+			background-position: top center;
+			background-repeat: no-repeat;
+		}
+		.child_plus {
+			text-shadow: 0 0 2px #fff;
+			background-color: rgba(216, 41, 41, 0.829);
+			color: rgba(0, 0, 0, 1);
+			border-radius: 5px;
+			padding: 5px;
+			text-align: center;
+			background-image: url("{{ url_for('static', filename='images/up-arrow.png') }}");
+			background-size: auto 100%;
+			background-position: top center;
+			background-repeat: no-repeat;
 		}
 		table {
 			margin: 20px;
 		}
 		td {
+			text-align: center;
 			color: rgba(0, 0, 0, 1);
 		}
+
 	</style>
 </head>
 <body>
@@ -186,8 +216,12 @@
 				const childElement = document.createElement('td');
 				childElement.textContent = content; // Set the content of the child element
 
-				if (data[1][count])
+				if (data[1][count] == "True")
 					childElement.classList.add('child_good'); // Add a class for styling purposes
+				else if (data[1][count] == "minus")
+					childElement.classList.add('child_minus');
+				else if (data[1][count] == "plus")
+					childElement.classList.add('child_plus');
 				else
 					childElement.classList.add('child_wrong');
 				parentElement.appendChild(childElement); // Append the child to the parent

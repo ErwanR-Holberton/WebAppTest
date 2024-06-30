@@ -5,16 +5,54 @@ import random
 prefix = "/Holberdle/"
 
 data = [
-    ["Florian M", "C22", "1991", "M", "1.70m", "1", "Fondamenteaux"],
-    ["Erwan R", "C21", "1996", "M", "1.80m", "2", "AR/VR"],
-    ["Alexandre G", "C21", "1994", "M", "1.72m", "4", "FS"],
-    ["Nathalie", "C21", "1990", "F", "1.60m", "2.5", "FS"],
-    ["Stéphane", "C24", "1977", "M", "1.83m", "4", "Fondamenteaux 1"],
-    ["Tarek", "C23", "1990", "M", "1.80m", "3", "Fondamenteaux 2"],
-    ["Fred", "C24", "1983", "M", "1.78m", "5", "Fondamenteaux 1"],
-    ["Henri", "C24", "1994", "M", "1.86m", "5", "Fondamenteaux 1"],
-    ["Medhi", "C24", "1999", "M", "1.71m", "3", "Fondamenteaux 1"]
+    ["Florian M"    , "C22", "1991", "M", "1.70m", "1", "Fondamenteaux"],
+    ["Erwan R"      , "C21", "1996", "M", "1.80m", "2", "AR/VR"],
+    ["Alexandre G"  , "C21", "1994", "M", "1.72m", "4", "FS"],
+    ["Nathalie"     , "C21", "1990", "F", "1.60m", "2.5", "FS"],
+    ["Stéphane"     , "C24", "1977", "M", "1.83m", "4", "Fondamenteaux 1"],
+    ["Tarek"        , "C23", "1990", "M", "1.80m", "3", "Fondamenteaux 2"],
+    ["Fred"         , "C24", "1983", "M", "1.78m", "5", "Fondamenteaux 1"],
+    ["Henri"        , "C24", "1994", "M", "1.86m", "5", "Fondamenteaux 1"],
+    ["Medhi"        , "C24", "1999", "M", "1.71m", "3", "Fondamenteaux 1"],
+    ["Kévin"        , "C21", "1991", "M", "1.74m", "3", "AR/VR"],
+    ["Erwan C"      , "C21", "1991", "M", "1.74m", "0", "Diplomé(e)"],
+    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "Diplomé(e)"]
 ]
+
+def handle_size(text):
+    return float(text[:4])
+
+def get_true_false_plus_minus(index, user):
+    if index == 4:
+        usersize = handle_size(user[index])
+        choicesize = handle_size(holberdle_game.choice[index])
+        if usersize > choicesize:
+            return "minus"
+        elif usersize < choicesize:
+            return "plus"
+        elif usersize == choicesize:
+            return "True"
+    elif index in [2, 5]:
+        userval = float(user[index])
+        choiceval = float(holberdle_game.choice[index])
+        if userval > choiceval:
+            return "minus"
+        elif userval < choiceval:
+            return "plus"
+        elif userval == choiceval:
+            return "True"
+    else:
+        if user[index] == holberdle_game.choice[index]:
+            return "True"
+    return "False"
+
+def make_array(user):
+    send = []
+    for i in range(len(user)):
+        send.append(get_true_false_plus_minus(i, user))
+    return send
+
+
 class holberdle_game:
     choice = [None]
 
@@ -44,15 +82,9 @@ def routes():
         print(holberdle_game.choice)
         result = request.get_json()
         name = result['name']
-        send = []
         for user in data:
             if user[0] == name:
-                for i in range(len(user)):
-                    good = False
-                    if user[i] == holberdle_game.choice[i]:
-                        good = True
-                    send.append(good)
-                return jsonify(user, send)
+                return jsonify(user, make_array(user))
         return jsonify("error")
 
     holberdle_game.new_game()
