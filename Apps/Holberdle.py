@@ -15,8 +15,8 @@ data = [
     ["Henri"        , "C24", "1994", "M", "1.86m", "5", "Fondamenteaux 1"],
     ["Medhi"        , "C24", "1999", "M", "1.71m", "3", "Fondamenteaux 1"],
     ["Kévin"        , "C21", "1991", "M", "1.74m", "3", "AR/VR"],
-    ["Erwan C"      , "C21", "1991", "M", "1.74m", "0", "Diplomé(e)"],
-    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "Diplomé(e)"]
+    ["Erwan C"      , "C21", "1984", "M", "1.84m", "0", "RNCP"],
+    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "RNCP"]
 ]
 
 def handle_size(text):
