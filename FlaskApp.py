@@ -8,4 +8,4 @@ app = Flask(__name__)
 if "--local" not in argv:
     server_ip = "erhbtn.pythonanywhere.com"
 else:
-    server_ip = "127.0.0.1:8000"
+    server_ip = "127.0.0.1:5000"

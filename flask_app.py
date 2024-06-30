@@ -10,7 +10,6 @@ from Apps.BettyLinter import routes as routebetty"""
 
 prefixes = ""
 
-print(__file__, "sdftygsyhsdiuqxljlkwchgfchgjhkjkxfvxdghcnj,wxkhjhvcbjxkxckhgwxjhkjlcjwxjgcjkwxjlc")
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 
@@ -31,4 +30,4 @@ def index2():
     return prefixes
 
 if __name__ == '__main__':
-    app.run(port=8000, debug=True)
+    app.run(port=5000, debug=True)

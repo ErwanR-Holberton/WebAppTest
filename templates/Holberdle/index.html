@@ -1,1 +1,201 @@
-noob
+<head>
+	<title>Holberdle</title>
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-image: url("{{ url_for('static', filename='images/Holberton1.jpg') }}");
+			background-size: cover;
+			background-repeat: no-repeat;
+		}
+		#title_image {
+			margin-bottom: 20px;
+			height: 200px;
+			display: flex;
+			justify-content: center;
+		}
+		#title_image > img {
+			width: 600px;
+		}
+		#answer {
+			display: flex;
+			width: 20%;
+			height: 30px;
+		}
+		#answer_input {
+			width: calc(100% - 30px);
+			background-color: rgb(255, 255, 255);
+			border-radius: 5px;
+		}
+		#answer_validate {
+			width: 30px;
+			height: 30px;
+			background-color: gray;
+			background-image: url("{{ url_for('static', filename='images/Send_button.png') }}");
+			background-size: cover;
+			border-radius: 50%;
+		}
+
+		.autocomplete-popup {
+			width: calc(20% - 30px);
+			margin-top: 30px;
+			display: none;
+			position: absolute;
+			border: 1px solid #ccc;
+			background-color: #ffffff;
+			z-index: 1000;
+			max-height: 200px;
+			overflow-y: auto;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			border-radius: 5px;
+		}
+
+		.autocomplete-popup div {
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		.autocomplete-popup div:hover {
+			background-color: #e9e9e9;
+		}
+		th {
+			background-color: #e9e9e969;
+			border-radius: 5px;
+			text-shadow: 0 0 5px #fff;
+			padding: 5px;
+		}
+
+		.child_good {
+			background-color: rgba(2, 209, 88, 0.801);
+			color: rgba(0, 0, 0, 1);
+			border-radius: 5px;
+			padding: 5px;
+
+		}
+		.child_wrong {
+			background-color: rgba(216, 41, 41, 0.829);
+			color: rgba(0, 0, 0, 1);
+			border-radius: 5px;
+			padding: 5px;
+
+		}
+		table {
+			margin: 20px;
+		}
+		td {
+			color: rgba(0, 0, 0, 1);
+		}
+	</style>
+</head>
+<body>
+	<div id="title_image">
+		<img src="{{ url_for('static', filename='images/Holberdle.png') }}" alt="Example Image">
+	</div>
+	<div id="answer">
+		<input id="answer_input">
+		<button id="answer_validate"></button>
+		<div id="autocomplete-popup" class="autocomplete-popup"></div>
+	</div>
+	<table>
+		<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Cohorte</th>
+				<th>Année</th>
+				<th>Genre</th>
+				<th>Taille</th>
+				<th>Presence</th>
+				<th>Spécialisation</th>
+			</tr>
+		</thead>
+		<tbody id="result_table"></tbody>
+
+	</table>
+
+	<script>
+
+		async function fetchNames() {
+			try {
+				const response = await fetch('/Holberdle/get_names');
+				if (!response.ok) { throw new Error('Network response was not ok');}
+				names = await response.json();
+			} catch (error) { console.error('There has been a problem with your fetch operation:', error); }
+		}
+
+		window.onload = fetchNames;
+		const answerInput = document.getElementById('answer_input');
+		const autocompletePopup = document.getElementById('autocomplete-popup');
+		const sendButton = document.getElementById('answer_validate');
+		const resultTable = document.getElementById('result_table');
+		let names = []
+
+		answerInput.addEventListener('input', function() {
+			const input = this.value.toLowerCase();
+			const matches = names.filter(name => name.toLowerCase().includes(input));
+			showAutocompletePopup(matches);
+		});
+
+		function showAutocompletePopup(matches) {
+			if (matches.length > 0) {
+				autocompletePopup.innerHTML = '';
+				autocompletePopup.style.display = 'block';
+				matches.forEach(name => {
+					const div = document.createElement('div');
+					div.textContent = name;
+					div.addEventListener('click', function() {
+						answerInput.value = name;
+						autocompletePopup.style.display = 'none';
+					});
+					autocompletePopup.appendChild(div);
+				});
+			} else {
+				autocompletePopup.style.display = 'none';
+			}
+		}
+
+		sendButton.addEventListener('click', function() {
+			const inputValue = answerInput.value.trim();
+			if (inputValue !== '') {
+				const url = '/Holberdle/check_name';
+				const data = { name: inputValue };
+
+				fetch(url, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(data)
+				})
+				.then(response => {
+					if (!response.ok) { throw new Error('Network response was not ok'); }
+					return response.json();
+				})
+				.then(data => {
+					console.log('Server response:', data);
+					addline(data);
+				})
+				.catch(error => { console.error('There has been a problem with your fetch operation:', error); });
+			} else { console.error('Input value cannot be empty'); }
+		});
+
+		function addline(data) {
+			const parentElement = document.createElement('tr');
+			parentElement.classList.add('parent'); // Add a class for styling purposes
+
+			let count = 0;
+			data[0].forEach(content => {
+				const childElement = document.createElement('td');
+				childElement.textContent = content; // Set the content of the child element
+
+				if (data[1][count])
+					childElement.classList.add('child_good'); // Add a class for styling purposes
+				else
+					childElement.classList.add('child_wrong');
+				parentElement.appendChild(childElement); // Append the child to the parent
+				count += 1;
+			});
+
+			// Append the parent element to the container
+			resultTable.insertBefore(parentElement, resultTable.firstChild);
+		}
+	</script>
+</body>
