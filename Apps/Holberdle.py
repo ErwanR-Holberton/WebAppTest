@@ -5,18 +5,22 @@ import random
 prefix = "/Holberdle/"
 
 data = [
-    ["Florian M"    , "C22", "1991", "M", "1.70m", "1", "Fondamenteaux"],
+    ["Florian M"    , "C22", "1991", "M", "1.70m", "1", "Fondamentaux 3"],
     ["Erwan R"      , "C21", "1996", "M", "1.80m", "2", "AR/VR"],
     ["Alexandre G"  , "C21", "1994", "M", "1.72m", "4", "FS"],
     ["Nathalie"     , "C21", "1990", "F", "1.60m", "2.5", "FS"],
-    ["Stéphane"     , "C24", "1977", "M", "1.83m", "4", "Fondamenteaux 1"],
-    ["Tarek"        , "C23", "1990", "M", "1.80m", "3", "Fondamenteaux 2"],
-    ["Fred"         , "C24", "1983", "M", "1.78m", "5", "Fondamenteaux 1"],
-    ["Henri"        , "C24", "1994", "M", "1.86m", "5", "Fondamenteaux 1"],
-    ["Medhi"        , "C24", "1999", "M", "1.71m", "3", "Fondamenteaux 1"],
+    ["Stéphane"     , "C24", "1977", "M", "1.83m", "4", "Fondamentaux 1"],
+    ["Tarek"        , "C23", "1990", "M", "1.80m", "3", "Fondamentaux 2"],
+    ["Fred"         , "C24", "1983", "M", "1.78m", "5", "Fondamentaux 1"],
+    ["Henri"        , "C24", "1994", "M", "1.86m", "5", "Fondamentaux 1"],
+    ["Medhi"        , "C24", "1999", "M", "1.71m", "3", "Fondamentaux 1"],
     ["Kévin"        , "C21", "1991", "M", "1.74m", "3", "AR/VR"],
     ["Erwan C"      , "C21", "1984", "M", "1.84m", "0", "RNCP"],
-    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "RNCP"]
+    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "RNCP"],
+    ["Gaël"         , "C21", "1987", "M", "1.69m", "1", "AR/VR"],
+    ["Erwan "       , "C23", "1988", "M", "1.73m", "4", "Fondamentaux 2"],
+    ["Tifenn"       , "C23", "1992", "M", "1.78m", "3", "Fondamentaux 2"],
+    ["Marc"         , "C23", "1991", "M", "1.82m", "5", "Fondamentaux 2"]
 ]
 
 def handle_size(text):
