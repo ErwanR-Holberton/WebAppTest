@@ -91,22 +91,36 @@
 			border-radius: 5px;
 			padding: 5px;
 			text-align: center;
+			position: relative;
+		}
+		.child_minus::before {
+			content: "";
+			position:absolute;
+			inset: 0;
 			background-image: url("{{ url_for('static', filename='images/down-arrow.png') }}");
 			background-size: auto 100%;
 			background-position: top center;
 			background-repeat: no-repeat;
+			opacity: 0.4;
 		}
 		.child_plus {
+			position: relative;
 			text-shadow: 0 0 2px #fff;
 			background-color: rgba(216, 41, 41, 0.829);
 			color: rgba(0, 0, 0, 1);
 			border-radius: 5px;
 			padding: 5px;
 			text-align: center;
+		}
+		.child_plus::before {
+			content: "";
+			position:absolute;
+			inset: 0;
 			background-image: url("{{ url_for('static', filename='images/up-arrow.png') }}");
 			background-size: auto 100%;
 			background-position: top center;
 			background-repeat: no-repeat;
+			opacity: 0.4;
 		}
 		table {
 			margin: 20px;
@@ -162,7 +176,7 @@
 
 		answerInput.addEventListener('input', function() {
 			const input = this.value.toLowerCase();
-			const matches = names.filter(name => name.toLowerCase().includes(input));
+			const matches = names.filter(name => name.toLowerCase().startsWith(input.toLowerCase()));;
 			showAutocompletePopup(matches);
 		});
 
@@ -174,7 +188,9 @@
 					const div = document.createElement('div');
 					div.textContent = name;
 					div.addEventListener('click', function() {
-						answerInput.value = name;
+						request_name_info({ name: name });
+						names = names.filter(item => item !== name);
+						answerInput.value = '';
 						autocompletePopup.style.display = 'none';
 					});
 					autocompletePopup.appendChild(div);
@@ -183,29 +199,37 @@
 				autocompletePopup.style.display = 'none';
 			}
 		}
+		document.addEventListener('click', function(event) {
+			if (!document.getElementById('answer').contains(event.target)) {
+				autocompletePopup.style.display = 'none';
+			}
+		});
 
 		sendButton.addEventListener('click', function() {
 			const inputValue = answerInput.value.trim();
 			if (inputValue !== '') {
-				const url = '/Holberdle/check_name';
-				const data = { name: inputValue };
-
-				fetch(url, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(data)
-				})
-				.then(response => {
-					if (!response.ok) { throw new Error('Network response was not ok'); }
-					return response.json();
-				})
-				.then(data => {
-					console.log('Server response:', data);
-					addline(data);
-				})
-				.catch(error => { console.error('There has been a problem with your fetch operation:', error); });
+				request_name_info({ name: inputValue });
 			} else { console.error('Input value cannot be empty'); }
 		});
+
+		function request_name_info(data) {
+			const url = '/Holberdle/check_name';
+
+			fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data)
+			})
+			.then(response => {
+				if (!response.ok) { throw new Error('Network response was not ok'); }
+				return response.json();
+			})
+			.then(data => {
+				console.log('Server response:', data);
+				addline(data);
+			})
+			.catch(error => { console.error('There has been a problem with your fetch operation:', error); });
+		}
 
 		function addline(data) {
 			const parentElement = document.createElement('tr');
