@@ -1,4 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Holberdle</title>
 	<style>
 		body {
@@ -21,6 +25,7 @@
 		#answer {
 			display: flex;
 			width: 20%;
+			min-width: 250px;
 			height: 30px;
 		}
 		#answer_input {
@@ -46,6 +51,7 @@
 			background-color: #ffffff;
 			z-index: 1000;
 			max-height: 200px;
+			min-width: 250px;
 			overflow-y: auto;
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 			border-radius: 5px;
@@ -124,15 +130,103 @@
 		}
 		table {
 			margin: 20px;
+			--anim-base-delay: .5s;
+			border-spacing: 5px;
+			font-size: large;
+		}
+		th {
+			padding: 1rem;
 		}
 		td {
 			text-align: center;
 			color: rgba(0, 0, 0, 1);
+
+			padding: 1rem 0;
+			height: 50px;
+			/* opacity: 0; */
+			/* animation: fadeIn .75s forwards var(--anim-delay, 0s); */
+			backface-visibility: hidden;
+			transform: rotateY(180deg);
+			animation: cardFlip .75s forwards var(--anim-delay, 0s);
+		}
+		@keyframes fadeIn {
+			0% { opacity: 0; }
+			100% { opacity: 1; }
+		}
+		@keyframes cardFlip {
+				0% { transform: rotateY(180deg); }
+				100% { transform: rotateY(0deg); }
+		}
+		td:nth-child(1) {
+				--anim-delay: calc(var(--anim-base-delay) * 0);
+		}
+		td:nth-child(2) {
+				--anim-delay: calc(var(--anim-base-delay) * 1);
+		}
+		td:nth-child(3) {
+				--anim-delay: calc(var(--anim-base-delay) * 2);
+		}
+		td:nth-child(4) {
+				--anim-delay: calc(var(--anim-base-delay) * 3);
+		}
+		td:nth-child(5) {
+				--anim-delay: calc(var(--anim-base-delay) * 4);
+		}
+		td:nth-child(6) {
+				--anim-delay: calc(var(--anim-base-delay) * 5);
+		}
+		td:nth-child(7) {
+				--anim-delay: calc(var(--anim-base-delay) * 6);
+		}
+		tr.win {
+				animation: win 1s infinite ease-in-out calc(var(--anim-base-delay) * 7);
+		}
+		@keyframes win {
+				0% { scale: 1; }
+				50% { scale: 1.15; }
+				100% { scale: 1; }
+		}
+		#countdown_container {
+			position: fixed;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			top: 10px;  /* Adjust as needed */
+    		right: 10px; /* Adjust as needed */
+		}
+		#countdown_container > div {
+			margin: 5px;
 		}
 
 	</style>
 </head>
 <body>
+	<div id="countdown_container">
+		<h4>Reset in:</h4>
+		<div id="countdown"></div>
+	</div>
+
+	<script>
+		// Get the target time from Flask
+		const targetTime = new Date('{{ target_time }}').getTime();
+
+		// Update the countdown every second
+		const x = setInterval(function() {
+			const now = new Date().getTime();
+			const distance = targetTime - now;
+
+			const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			document.getElementById('countdown').innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+
+			if (distance < 0) {
+				clearInterval(x);
+				document.getElementById('countdown').innerHTML = "EXPIRED";
+			}
+		}, 1000);
+	</script>
 	<div id="title_image">
 		<img src="{{ url_for('static', filename='images/Holberdle.png') }}" alt="Example Image">
 	</div>
@@ -236,10 +330,12 @@
 			parentElement.classList.add('parent'); // Add a class for styling purposes
 
 			let count = 0;
+			let win = true;
 			data[0].forEach(content => {
 				const childElement = document.createElement('td');
 				childElement.textContent = content; // Set the content of the child element
-
+				if (data[1][count] != "True")
+					win = false;
 				if (data[1][count] == "True")
 					childElement.classList.add('child_good'); // Add a class for styling purposes
 				else if (data[1][count] == "minus")
@@ -251,9 +347,53 @@
 				parentElement.appendChild(childElement); // Append the child to the parent
 				count += 1;
 			});
+			if (win) {
+				parentElement.classList.add('win');
+				shootConfetti();
+			}
 
 			// Append the parent element to the container
 			resultTable.insertBefore(parentElement, resultTable.firstChild);
 		}
+		function shootConfetti() {
+			setTimeout(function() {
+					confetti({
+							particleCount: 40,
+							angle: 50,
+							spread: 55,
+							origin: { x: 0 },
+							ticks: 300
+					});
+			}, Math.random() * 250);
+			setTimeout(function() {
+					confetti({
+							particleCount: 40,
+							angle: 70,
+							spread: 55,
+							origin: { x: 0 },
+							ticks: 300
+					});
+			}, Math.random() * 250);
+			setTimeout(function() {
+					confetti({
+							particleCount: 40,
+							angle: 110,
+							spread: 55,
+							origin: { x: 1 },
+							ticks: 300
+					});
+			}, Math.random() * 250);
+			setTimeout(function() {
+					confetti({
+							particleCount: 40,
+							angle: 130,
+							spread: 55,
+							origin: { x: 1 },
+							ticks: 300
+					});
+			}, Math.random() * 250);
+			setTimeout(shootConfetti, 500 + Math.random() * 500);
+		}
 	</script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </body>

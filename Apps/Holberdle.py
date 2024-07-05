@@ -2,27 +2,40 @@
 if __name__ != "__main__":
     from FlaskApp import *
 import random
+from datetime import datetime, timedelta
 prefix = "/Holberdle/"
 
+dt = 1
+
 data = [
-    ["Florian M"    , "C22", "1991", "M", "1.70m", "1", "Fondamentaux 3"],
-    ["Erwan R"      , "C21", "1996", "M", "1.80m", "2", "AR/VR"],
-    ["Alexandre G"  , "C21", "1994", "M", "1.72m", "4", "FS"],
-    ["Nathalie"     , "C21", "1990", "F", "1.60m", "2.5", "FS"],
-    ["Stéphane"     , "C24", "1977", "M", "1.83m", "4", "Fondamentaux 1"],
-    ["Tarek"        , "C23", "1990", "M", "1.80m", "3", "Fondamentaux 2"],
     ["Fred"         , "C24", "1983", "M", "1.78m", "5", "Fondamentaux 1"],
     ["Henri"        , "C24", "1994", "M", "1.86m", "5", "Fondamentaux 1"],
     ["Medhi"        , "C24", "1999", "M", "1.71m", "3", "Fondamentaux 1"],
-    ["Kévin"        , "C21", "1991", "M", "1.74m", "3", "AR/VR"],
-    ["Erwan C"      , "C21", "1984", "M", "1.84m", "0", "RNCP"],
-    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "RNCP"],
-    ["Gaël"         , "C21", "1987", "M", "1.69m", "1", "AR/VR"],
+    ["Stéphane"     , "C24", "1977", "M", "1.83m", "4", "Fondamentaux 1"],
+
     ["Erwan L"      , "C23", "1988", "M", "1.73m", "4", "Fondamentaux 2"],
     ["Tifenn"       , "C23", "1992", "M", "1.78m", "3", "Fondamentaux 2"],
     ["Marc C"       , "C23", "1991", "M", "1.82m", "5", "Fondamentaux 2"],
     ["Nicolas"      , "C23", "1990", "M", "1.87m", "5", "Fondamentaux 2"],
-    ["Antonin"      , "C23", "1998", "M", "1.67m", "3", "Fondamentaux 2"]
+    ["Antonin"      , "C23", "1998", "M", "1.67m", "3", "Fondamentaux 2"],
+    ["Joshua"       , "C23", "1995", "M", "1.80m", "2", "Fondamentaux 2"],
+    ["Tarek"        , "C23", "1990", "M", "1.80m", "3", "Fondamentaux 2"],
+
+    ["Florian M"    , "C22", "1991", "M", "1.70m", "1", "Fondamentaux 3"],
+
+    ["Erwan R"      , "C21", "1996", "M", "1.80m", "2", "AR/VR"],
+    ["Kévin"        , "C21", "1991", "M", "1.74m", "3", "AR/VR"],
+    ["Gaël"         , "C21", "1987", "M", "1.69m", "1", "AR/VR"],
+    ["Arnaud  "     , "C20", "2001", "M", "1.69m", "0.5", "AR/VR"],
+
+    ["Alexandre G"  , "C21", "1994", "M", "1.72m", "4", "FS"],
+    ["Nathalie"     , "C21", "1990", "F", "1.60m", "2.5", "FS"],
+    ["Benjamin"     , "C20", "1989", "M", "1.72m", "1", "FS"],
+
+    ["Erwan C"      , "C21", "1984", "M", "1.84m", "0", "RNCP"],
+    ["Nadège"       , "C21", "1987", "F", "1.58m", "0", "RNCP"],
+
+    ["Charlotte"  , "Staff", "1995", "F", "1.79m", "5", "Staff"],
 ]
 
 def handle_size(text):
@@ -58,18 +71,36 @@ def make_array(user):
         send.append(get_true_false_plus_minus(i, user))
     return send
 
+def get_time():
+    time = datetime.now()
+    return [time.day, time.hour]
+
+def compare_time(time1, time2):
+    if len(time1) != len(time2):
+        return False
+    else:
+        for i in range(len(time1)):
+            if time1[i] != time2[i]:
+                return False
+    return True
+
 
 class holberdle_game:
     choice = [None]
+    start_time = get_time()
 
     @classmethod
     def new_game(cls):
+        cls.start_time = get_time()
         cls.choice = data[random.randint(0, len(data) - 1)]
 
 def routes():
     @app.route(prefix)
     def holberdle():
-        return render_template(prefix + 'index.html')
+        if (not compare_time(get_time(), holberdle_game.start_time)):
+            print("newgame")
+            holberdle_game.new_game()
+        return render_template(prefix + 'index.html', target_time=datetime.now().replace(day=holberdle_game.start_time[0], hour=holberdle_game.start_time[1] + dt, minute=0, second=0, microsecond=0))
 
     @app.route(prefix + "new_game")
     def holberdle_new_game():
@@ -85,7 +116,6 @@ def routes():
 
     @app.route(prefix + "check_name", methods=['POST'])
     def holberdle_check_name():
-        print(holberdle_game.choice)
         result = request.get_json()
         name = result['name']
         for user in data:
