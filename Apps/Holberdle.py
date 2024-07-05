@@ -100,7 +100,7 @@ def routes():
         if (not compare_time(get_time(), holberdle_game.start_time)):
             print("newgame")
             holberdle_game.new_game()
-        return render_template(prefix + 'index.html', target_time=datetime.now().replace(day=holberdle_game.start_time[0], hour=holberdle_game.start_time[1] + dt, minute=0, second=0, microsecond=0))
+        return render_template(prefix + 'index.html', target_time=datetime.now().replace(day=holberdle_game.start_time[0], hour=holberdle_game.start_time[1] + dt + 2, minute=0, second=0, microsecond=0))
 
     @app.route(prefix + "new_game")
     def holberdle_new_game():
