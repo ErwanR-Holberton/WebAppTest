@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-import os
+import os, sys
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from sys import argv
 
@@ -30,10 +30,12 @@ print("=================================start loop==============================
 for app_folder in os.listdir('./'):
     if app_folder in ignore_dirs:
         continue
+    sys.path.insert(0, os.path.join(os.getcwd(), app_folder))
     print(app_folder)
     module = __import__(app_folder)
     app_name = getattr(module, "app")
     apps[f'/{app_folder}'] = app_name
+    sys.path.pop(0)
     print(app_folder)
     links += f"<a href='http://{address}/{app_folder}/'>http://{address}/{app_folder}/</a><br>"
 
@@ -52,6 +54,7 @@ def print_routes(app):
 @app.before_request
 def log_request_info():
     print(f"Request Path: {request.path}")
+
 
 print(apps)
 for azerty in apps.values():
