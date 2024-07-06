@@ -88,7 +88,7 @@ def routes():
     def holberdle():
         if (get_time() > holberdle_game.start_time + timedelta(hours=dt)):
             holberdle_game.new_game()
-        return render_template(prefix + 'index.html', target_time=holberdle_game.start_time + timedelta(hours=dt))
+        return render_template(prefix + 'index.html', target_time=holberdle_game.start_time + timedelta(hours=dt + 2))
 
     @app.route(prefix + "new_game")
     def holberdle_new_game():
