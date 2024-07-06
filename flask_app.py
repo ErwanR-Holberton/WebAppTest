@@ -49,6 +49,10 @@ def print_routes(app):
     for rule in app.url_map.iter_rules():
         print(f"Endpoint: {rule.endpoint}, URL: {rule}")
 
+@app.before_request
+def log_request_info():
+    app.logger.debug(f"Request Path: {request.path}")
+
 print(apps)
 for azerty in apps.values():
     print_routes(azerty)
