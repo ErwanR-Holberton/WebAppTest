@@ -8,8 +8,16 @@ address = "localhost:5000"
 server_ip = address
 links = ""
 
+if os.name == "nt":
+    os.system("cls")
+    print("The operating system is Windows")
+elif os.name == "posix":
+    os.system("clear")
+    os.system("cd WebAppTest")
+    print("The operating system is Linux or macOS")
+else:
+    print(f"The operating system is {os.name}")
 
-os.system("cls")
 app = Flask(__name__)
 apps = {}
 ignore_dirs = ['__pycache__', 'main.py', '.git', 'old_files', '.gitignore']
