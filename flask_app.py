@@ -30,16 +30,13 @@ print("=================================start loop==============================
 for app_folder in os.listdir('./'):
     if app_folder in ignore_dirs:
         continue
-    sys.path.insert(0, os.path.join(os.getcwd(), app_folder))
     print(app_folder)
     module = __import__(app_folder)
     app_name = getattr(module, "app")
     apps[f'/{app_folder}'] = app_name
-    sys.path.pop(0)
     print(app_folder)
     links += f"<a href='http://{address}/{app_folder}/'>http://{address}/{app_folder}/</a><br>"
 
-os.chdir(original_cwd)
 application = DispatcherMiddleware(app, apps)
 
 
