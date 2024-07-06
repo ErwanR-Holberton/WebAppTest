@@ -51,7 +51,7 @@ def print_routes(app):
 
 @app.before_request
 def log_request_info():
-    app.logger.debug(f"Request Path: {request.path}")
+    print(f"Request Path: {request.path}")
 
 print(apps)
 for azerty in apps.values():
