@@ -21,7 +21,7 @@ else:
 
 app = Flask(__name__)
 apps = {}
-ignore_dirs = ['__pycache__', 'flask_app.py', '.git', 'old_files', '.gitignore']
+ignore_dirs = ['__pycache__', 'flask_app.py', '.git', 'old_files', '.gitignore', 'templates']
 
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
