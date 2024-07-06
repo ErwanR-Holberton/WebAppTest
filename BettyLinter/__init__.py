@@ -8,7 +8,7 @@ if "--local" not in argv:
 else:
     server_ip = "127.0.0.1:5000"
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder= os.path.join(os.path.dirname(__file__), 'templates'))
 
 def file_save(text):
     with open("file.c", "w+") as file:
@@ -32,6 +32,7 @@ def run_betty_doc_check(text):
 
 @app.route("/")
 def indexbetty():
+    print(f"Rendering template from folder: {app.template_folder}")
     return render_template("index.html", address=server_ip)
 
 @app.route("/validate", methods=['POST'])
