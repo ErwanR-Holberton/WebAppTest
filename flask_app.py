@@ -1,33 +1,36 @@
-#!/usr/bin/env python3
-from FlaskApp import *
+from flask import Flask, jsonify
 import os
-import importlib
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+import sys
+
+sys.setrecursionlimit(100)
+address = "localhost:5000"
+server_ip = address
+links = ""
 
 
+os.system("cls")
+app = Flask(__name__)
+apps = {}
+ignore_dirs = ['__pycache__', 'main.py', '.git', 'old_files', '.gitignore']
 
-"""from Apps.App1 import routes as routes1
-from Apps.BettyLinter import routes as routebetty"""
+for app_folder in os.listdir('./'):
+    if app_folder in ignore_dirs:
+        continue
+    print(app_folder)
+    module = __import__(app_folder)
+    app_name = getattr(module, "app")
+    apps[f'/{app_folder}'] = app_name
+    print(app_folder)
+    links += f"<a href='http://{address}/{app_folder}/'>http://{address}/{app_folder}/</a><br>"
 
-prefixes = ""
+application = DispatcherMiddleware(app, apps)
 
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
-
-
-for filename in os.listdir('./Apps'):  # Iterate over each file in the folder
-
-    if filename.endswith('.py') and filename != '__init__.py':                              # Check if the file is a Python module
-        module_name = filename[:-3]                                                         # Remove the .py extension
-        module = importlib.import_module(f"Apps.{module_name}")       # Import the module dynamically
-
-        if hasattr(module, 'routes') and hasattr(module, 'prefix'):
-            module.routes()                 # Call the routes function
-            addr = f'http://{server_ip}{ module.prefix}'
-            prefixes += f'<a href="{addr}">{addr}</a><br>'
 
 @app.route('/')
-def index2():
-    print(prefixes)
-    return prefixes
+def index():
+    return links
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    from werkzeug.serving import run_simple
+    run_simple('localhost', 5000, application)

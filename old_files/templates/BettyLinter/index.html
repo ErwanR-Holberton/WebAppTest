@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betty Linter</title>
+    <style type="text/css">
+        :root {
+            --color-red: #e1003c;
+
+            --background-button: linear-gradient(120deg, var(--color-red) 66%, magenta);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            color: #1a1b1f;
+            font-family: Aktivgrotesk, sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 28px;
+        }
+
+        .container {
+            width: calc(100% - 2rem);
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 3rem 0;
+            text-align: center;
+            border: 1px white solid;
+            box-shadow: 0px 0px 32px 8px rgba(0, 0, 0, .1);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 40pt;
+            font-weight: bold;
+            color: var(--color-red);
+        }
+
+        form {
+            margin: 5rem 0 2.5rem;
+        }
+
+        textarea {
+            margin: 1rem auto;
+            width: 90%;
+            max-width: 100%;
+            display: block;
+            border-width: 2px;
+            border-radius: 10px;
+            border-color: var(--color-red);
+        }
+
+        label {
+            font-size: 16pt;
+            font-weight: bold;
+        }
+
+        button {
+            font-size: 16pt;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0);
+            background-image: var(--background-button);
+            color: white;
+            width: 50%;
+            max-width: 250px;
+            padding: 1rem 2rem;
+            border: 0px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all .2s;
+
+            &:hover {
+                translate: 0 -5px;
+            }
+        }
+
+        #loader {
+            border: 10px solid white;
+            border-top: 10px solid var(--color-red);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 2s linear infinite;
+            margin: auto;
+
+            &.disabled {
+                display: none;
+            }
+        }
+
+        #output_style, #output_doc {
+            text-align: left;
+            padding: 0 5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        function validateCode() {
+            const code = document.getElementById('codeInput').value;
+            setLoaderState(true);
+            fetch('http://{{address}}/BettyLinter/validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output_style').innerText = data.result.style;
+                document.getElementById('output_doc').innerText = data.result.doc;
+                setLoaderState(false);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function setLoaderState(state) {
+            const loader = document.getElementById('loader');
+            if (state)
+                loader.classList.remove('disabled');
+            else
+                loader.classList.add('disabled');
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Betty Linter</h1>
+        <form id="codeForm">
+            <label for="codeInput">Enter your code:</label>
+            <textarea id="codeInput" name="code" rows="20"></textarea>
+            <button type="button" onclick="validateCode()">Validate</button>
+        </form>
+        <div id="loader" class="disabled"></div>
+        <div id="output_style"></div>
+        <div id="output_doc"></div>
+    </div>
+</body>
+</html>
