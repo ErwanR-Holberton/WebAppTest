@@ -1,10 +1,13 @@
 from flask import Flask, jsonify
 import os
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from sys import argv
 
+if "--local" not in argv:
+    address = "erhbtn.pythonanywhere.com"
+else:
+    address = "127.0.0.1:5000"
 
-address = "localhost:5000"
-server_ip = address
 links = ""
 
 if os.name == "nt":
