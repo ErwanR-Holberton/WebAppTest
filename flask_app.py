@@ -13,15 +13,16 @@ if os.name == "nt":
     print("The operating system is Windows")
 elif os.name == "posix":
     os.system("clear")
-    os.system("cd WebAppTest")
     print("The operating system is Linux or macOS")
 else:
     print(f"The operating system is {os.name}")
 
 app = Flask(__name__)
 apps = {}
-ignore_dirs = ['__pycache__', 'main.py', '.git', 'old_files', '.gitignore']
+ignore_dirs = ['__pycache__', 'flask_app.py', '.git', 'old_files', '.gitignore']
 
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 print("=================================start loop==================================================")
 for app_folder in os.listdir('./'):
