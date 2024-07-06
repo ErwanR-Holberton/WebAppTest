@@ -44,6 +44,13 @@ application = DispatcherMiddleware(app, apps)
 def index():
     return links
 
+def print_routes(app):
+    for rule in app.url_map.iter_rules():
+        print(f"Endpoint: {rule.endpoint}, URL: {rule}")
+
+print(apps)
+for azerty in apps.values():
+    print_routes(azerty)
 if __name__ == '__main__':
     from werkzeug.serving import run_simple
     run_simple('localhost', 5000, application)
