@@ -23,7 +23,7 @@ app = Flask(__name__)
 apps = {}
 ignore_dirs = ['__pycache__', 'flask_app.py', '.git', 'old_files', '.gitignore', 'templates']
 
-
+original_cwd = os.getcwd()
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 print("=================================start loop==================================================")
@@ -37,6 +37,7 @@ for app_folder in os.listdir('./'):
     print(app_folder)
     links += f"<a href='http://{address}/{app_folder}/'>http://{address}/{app_folder}/</a><br>"
 
+os.chdir(original_cwd)
 application = DispatcherMiddleware(app, apps)
 
 
