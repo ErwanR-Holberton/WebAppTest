@@ -72,18 +72,7 @@ def make_array(user):
     return send
 
 def get_time():
-    time = datetime.now()
-    return [time.day, time.hour]
-
-def compare_time(time1, time2):
-    if len(time1) != len(time2):
-        return False
-    else:
-        for i in range(len(time1)):
-            if time1[i] != time2[i]:
-                return False
-    return True
-
+    return datetime.now().replace(minute=0, second=0, microsecond=0)
 
 class holberdle_game:
     choice = [None]
@@ -97,10 +86,9 @@ class holberdle_game:
 def routes():
     @app.route(prefix)
     def holberdle():
-        if (not compare_time(get_time(), holberdle_game.start_time)):
-            print("newgame")
+        if (get_time() > holberdle_game.start_time + timedelta(hours=dt)):
             holberdle_game.new_game()
-        return render_template(prefix + 'index.html', target_time=datetime.now().replace(day=holberdle_game.start_time[0], hour=holberdle_game.start_time[1] + dt + 2, minute=0, second=0, microsecond=0))
+        return render_template(prefix + 'index.html', target_time=holberdle_game.start_time + timedelta(hours=dt))
 
     @app.route(prefix + "new_game")
     def holberdle_new_game():

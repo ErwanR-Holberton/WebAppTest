@@ -10,8 +10,9 @@
 			flex-direction: column;
 			align-items: center;
 			background-image: url("{{ url_for('static', filename='images/Holberton1.jpg') }}");
-			background-size: cover;
+			background-size: 100% auto;
 			background-repeat: no-repeat;
+			overflow: hidden;
 		}
 		#title_image {
 			margin-bottom: 20px;
@@ -128,6 +129,10 @@
 			background-repeat: no-repeat;
 			opacity: 0.4;
 		}
+		#table_container {
+			overflow: auto; /* or overflow: scroll; */
+    		max-height: 500px; /* example max height for the container */
+		}
 		table {
 			margin: 20px;
 			--anim-base-delay: .5s;
@@ -235,7 +240,7 @@
 		<button id="answer_validate"></button>
 		<div id="autocomplete-popup" class="autocomplete-popup"></div>
 	</div>
-	<table>
+	<div id="table_container"><table>
 		<thead>
 			<tr>
 				<th>Nom</th>
@@ -249,7 +254,7 @@
 		</thead>
 		<tbody id="result_table"></tbody>
 
-	</table>
+	</table></div>
 
 	<script>
 
