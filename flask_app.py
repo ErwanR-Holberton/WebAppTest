@@ -1,9 +1,8 @@
 from flask import Flask, jsonify
 import os
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-import sys
 
-sys.setrecursionlimit(100)
+
 address = "localhost:5000"
 server_ip = address
 links = ""
