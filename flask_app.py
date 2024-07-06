@@ -14,6 +14,8 @@ app = Flask(__name__)
 apps = {}
 ignore_dirs = ['__pycache__', 'main.py', '.git', 'old_files', '.gitignore']
 
+
+print("=================================start loop==================================================")
 for app_folder in os.listdir('./'):
     if app_folder in ignore_dirs:
         continue
