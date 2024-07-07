@@ -3,7 +3,14 @@ from FlaskApp import *
 import os
 import importlib
 
-
+if os.name == "nt":
+    os.system("cls")
+    print("The operating system is Windows")
+elif os.name == "posix":
+    os.system("clear")
+    print("The operating system is Linux or macOS")
+else:
+    print(f"The operating system is {os.name}")
 
 """from Apps.App1 import routes as routes1
 from Apps.BettyLinter import routes as routebetty"""

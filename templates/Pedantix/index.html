@@ -41,6 +41,7 @@
 			margin-top: -10px;
 			padding: 10px;
 			border-radius: 10px;
+			max-width: 80%;
 		}
 		summary {
 			background-color: #FFD700;
@@ -99,6 +100,7 @@
 			display: inline;
 			margin: 0px;
 			padding: 0px;
+			word-wrap: break-word; /* Ensure inline text wraps when necessary */
 		}
 		.w {
 			background-color: rgb(248, 249, 250);
@@ -109,8 +111,26 @@
 			font-size: inherit;
 			line-height: inherit;
 			margin: 0px;
+			white-space: pre;
+			text-align: center;
 		}
 
+		{% for pair in pairs %}
+			{% if pair|length != 1 %}
+			.id{{pair[0]}} {
+				display: inline-block;
+				width: {{ pair[1] * 8 }}px;
+			}
+			{% endif %}
+		{% endfor %}
+
+		.revealed {
+			width: auto;
+		}
+		.hidden {
+			background-color: #202122;
+			border-radius: 5px;
+		}
 	</style>
 </head>
 <body>
@@ -145,6 +165,94 @@
 				</p>
 
 			{% endfor %}
+
+			{% for title, items in dataset %}
+
+				{% if loop.first %}
+					<h2>{% for item in title %}<span class="w id{{ item.0 }} hidden">{{ item.1 }}</span>{% endfor %}</h2>
+				{% else %}
+					<h4>{% for item in title %}<span class="w id{{ item.0 }} hidden">{{ item.1 }}</span>{% endfor %}</h4>
+				{% endif %}
+
+				<p class="game_paragraph">
+					{% for item in items %}<span class="w id{{ item.0 }} hidden">{{ item.1 }}</span>{% endfor %}
+				</p>
+
+			{% endfor %}
 		</div>
 	</article>
+	<script>
+		const data_set = {{ pairs | tojson }};
+		const excludedValues = ["hidden", "revealed"];
+
+		data_set.forEach(item => {
+
+			if (!excludedValues.includes(item[2])) {
+				const elements = document.querySelectorAll(`span.id${item[0]}`);
+
+				elements.forEach(element => {
+					if (item[2] === "<br>") {
+						const brElement = document.createElement('br');
+						element.parentNode.replaceChild(brElement, element);
+					} else {
+						element.textContent = item[2];
+						element.classList.add('revealed');
+						element.classList.remove('hidden');
+					}
+				});
+			}
+		});
+
+
+		function sendGuessToServer(word) {
+			const postData = { word: word };
+
+			fetch('/Pedantix/guess', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(postData)
+			})
+			.then(response => {
+				if (!response.ok) { throw new Error('Network response was not ok'); }
+				return response.json();
+			})
+			.then(data => {
+				console.log('Response:', data);
+				data.forEach(item => {
+					if (typeof item[1] === 'string') {
+						const elements = document.querySelectorAll(`span.id${item[0]}`);
+
+						elements.forEach(element => {
+							element.textContent = item[1];
+							element.classList.add('revealed');
+							element.classList.remove('hidden');
+						});
+					}
+				});
+			})
+			.catch(error => { console.error('Error:', error); });
+		}
+
+		document.getElementById('pedantix-guess-btn').addEventListener('click', function(event) {
+			event.preventDefault(); // Prevent default form submission behavior if using a form
+
+			const word = document.getElementById('pedantix-guess').value;
+			sendGuessToServer(word);
+		});
+
+		function handleClick(event) {
+			const clickedElement = event.target;
+
+			if (!clickedElement.classList.contains('revealed')) {
+				clickedElement.style.color = 'white';
+
+				setTimeout(() => { clickedElement.style.color = ''; }, 1000); // 1000 milliseconds = 1 second
+			}
+		}
+		const spans = document.querySelectorAll('span');
+		spans.forEach(span => {
+			span.addEventListener('click', handleClick);
+		});
+
+	</script>
 </body>
