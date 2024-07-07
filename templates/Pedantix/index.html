@@ -30,6 +30,16 @@
 		}
 		aside {
 			flex: 1 0 0;
+			height: fit-content;
+			background-color: #FFD700;
+			box-shadow: inset 2px 2px 1px var(--summary-edge), 3px 3px 3px var(--back-shadow);
+			border-radius: 25px;
+			min-width: 15em;
+		}
+		aside > p {
+			margin: 0;
+			padding: 0;
+			margin-left: 20px;
 		}
 		article {
 			flex: 4 0 0;
@@ -42,12 +52,6 @@
 			padding: 10px;
 			border-radius: 10px;
 			max-width: 80%;
-		}
-		summary {
-			background-color: #FFD700;
-			box-shadow: inset 2px 2px 1px var(--summary-edge), 3px 3px 3px var(--back-shadow);
-			border-radius: 25px;
-			min-width: 15em;
 		}
 		#game {
 			font-family: sans-serif;
@@ -119,7 +123,7 @@
 			{% if pair|length != 1 %}
 			.id{{pair[0]}} {
 				display: inline-block;
-				width: {{ pair[1] * 8 }}px;
+				min-width: {{ pair[1] * 8 }}px;
 			}
 			{% endif %}
 		{% endfor %}
@@ -131,11 +135,17 @@
 			background-color: #202122;
 			border-radius: 5px;
 		}
+		.partial_grey {
+			background-color: #202122;
+			border-radius: 5px;
+			color: gray;
+		}
 	</style>
 </head>
 <body>
-	<aside>side
-		<summary>summary</summary>
+	<aside>
+		{% for word, id_len in words.items() %}<p class="cheat">{{id_len[0]}} : {{ word }}</p>{% endfor %}
+
 	</aside>
 	<article>
 		<h1>Pédantix</h1>
@@ -152,6 +162,7 @@
 		</form>
 
 		<div id="game">
+			<details>
 			{% set ns = namespace(counter=1) %}
 			{% for title, items in text %}
 				{% if loop.first %}
@@ -165,6 +176,7 @@
 				</p>
 
 			{% endfor %}
+		</details>
 
 			{% for title, items in dataset %}
 
@@ -218,6 +230,8 @@
 			})
 			.then(data => {
 				console.log('Response:', data);
+				if (data == null) { console.log(word); }
+				
 				data.forEach(item => {
 					if (typeof item[1] === 'string') {
 						const elements = document.querySelectorAll(`span.id${item[0]}`);
@@ -227,6 +241,23 @@
 							element.classList.add('revealed');
 							element.classList.remove('hidden');
 						});
+					}
+					else {
+						let id = item[0];
+						let element = data_set[id];
+						let previous_similarity = element[2];
+						let new_similarity = item[1];
+
+						if (previous_similarity !== 'revealed' && (previous_similarity === 'hidden' || previous_similarity < new_similarity) && new_similarity > 0.3 ) {
+							previous_similarity = new_similarity;
+							const elements = document.querySelectorAll(`span.id${item[0]}`);
+
+							elements.forEach(element => {
+								element.textContent = word;
+							element.classList.add('partial_grey');
+							element.classList.remove('hidden');
+							});
+						}
 					}
 				});
 			})

@@ -3,6 +3,68 @@ from FlaskApp import *
 prefix = "/Pedantix/"
 import re, string
 from datetime import datetime, timedelta
+import math
+dt = 1
+
+class DB:
+    database_path = 'skip1000-100.txt'
+    loaded_words = {}
+
+    @classmethod
+    def load_vectors(cls, words):
+        cls.loaded_words = {}
+        with open(cls.database_path, 'r') as f:
+            for line in f:
+                parts = line.split()
+                word = parts[0]
+                if word in words:
+                    vector = list(map(float, parts[1:]))
+                    cls.loaded_words[word] = vector
+        return cls.loaded_words
+
+    @classmethod
+    def load_vector(cls, word):
+        with open(cls.database_path, 'r') as f:
+            for line in f:
+                parts = line.split()
+                if word == parts[0]:
+                    return list(map(float, parts[1:]))
+        return None
+
+    @classmethod
+    def cosine_similarity(cls, vec1, vec2):
+        dot_product = sum(v1 * v2 for v1, v2 in zip(vec1, vec2))
+        magnitude1 = math.sqrt(sum(v ** 2 for v in vec1))
+        magnitude2 = math.sqrt(sum(v ** 2 for v in vec2))
+        if magnitude1 == 0 or magnitude2 == 0:
+            return 0.0  # Handle division by zero
+        return dot_product / (magnitude1 * magnitude2)
+
+    @classmethod
+    def compare_words(cls, word1, word2):
+        vector1 = cls.load_vector(word1)
+        vector2 = cls.load_vector(word2)
+        if vector1 is None or vector2 is None:
+            return None
+        return cls.cosine_similarity(vector1, vector2)
+
+    @classmethod
+    def get_all_similarity(cls, word1):
+        result = []
+        vec1 = cls.load_vector(word1)
+        if vec1 is None:
+            return None
+        for word2, id_len in pedantix_game.word_mapping.items():
+            vec2 = cls.loaded_words.get(word2)
+            id2 = id_len[0]
+            if vec2 is not None:
+                sim = cls.cosine_similarity(vec1, vec2)
+                if sim == 1:
+                    sim = word2
+            else:
+                sim = None
+            result.append([id2, sim])
+        return result
 
 def get_wiki_page(title=None):
     import requests
@@ -67,9 +129,11 @@ class pedantix_game:
 
     @classmethod
     def new_game(cls):
+        cls.start_time = get_time()
         cls.title, cls.text = get_wiki_page("Alphonse Michon-Dumarais")
         cls.format_text(cls.title, cls.text)
         cls.make_data_set()
+        DB.load_vectors(cls.words)
 
     @classmethod
     def format_text(cls, title, text):
@@ -113,6 +177,7 @@ class pedantix_game:
         args = {}
         args['text'] = cls.array
         args['pairs'] = cls.pair_id_len
+        args['words'] = cls.word_mapping
         args['dataset'] = cls.data_set
         return args
 
@@ -144,7 +209,7 @@ class pedantix_game:
             return [word_mapping[w] + ["<br>"] if categorize(w[0]) == "\n" else word_mapping[w] + ["hidden"] if categorize(w[0]) != "punct" else word_mapping[w] + [w] for w in words]
         """print(cls.text)
         print(cls.array)"""
-        words = extract_words(cls.array)
+        cls.words = words = extract_words(cls.array)
         """print(words)"""
         cls.word_mapping = create_word_mapping(words)
         """print(cls.word_mapping)"""
@@ -155,8 +220,6 @@ class pedantix_game:
         cls.data_set = replace_words_with_ids(cls.array, cls.word_mapping)
         """print(cls.data_set)"""
 
-class DB:
-    pass
 
 def routes():
 
@@ -170,13 +233,7 @@ def routes():
     def pedantix_guess():
         result = request.get_json()
         word = result['word']
-        res = []
-        for key, id_len in pedantix_game.word_mapping.items():
-            if key == word:
-                res.append([id_len[0], key])
-            else:
-                res.append([id_len[0], 0])
-
+        res = DB.get_all_similarity(word)
         return jsonify(res)
 
 
