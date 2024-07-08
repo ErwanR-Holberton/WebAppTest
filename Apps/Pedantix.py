@@ -3,12 +3,25 @@ from FlaskApp import *
 prefix = "/Pedantix/"
 import re, string
 from datetime import datetime, timedelta
-import math
+import math, requests
 dt = 1
 
 class DB:
     database_path = 'skip1000-100.txt'
     loaded_words = {}
+
+    def load_db():
+        url = f'https://drive.usercontent.google.com/download?id=1Mkb7NKOMNV8buxI6gbd8DyTlMuw62iWN&export=download&confirm=t&uuid=7ab09d9e-d08a-4265-a637-2b433db9f605'
+        response = requests.get(url)
+        content = response.content.decode().splitlines()
+
+        loaded_words = {}
+        for line in content:
+            parts = line.split()
+            word = parts[0]
+            vector = list(map(float, parts[1:]))
+            loaded_words[word] = vector
+        return loaded_words
 
     @classmethod
     def load_vectors(cls, words):
@@ -52,6 +65,24 @@ class DB:
     def get_all_similarity(cls, word1):
         result = []
         vec1 = cls.load_vector(word1)
+        if vec1 is None:
+            return None
+        for word2, id_len in pedantix_game.word_mapping.items():
+            vec2 = cls.loaded_words.get(word2)
+            id2 = id_len[0]
+            if vec2 is not None:
+                sim = cls.cosine_similarity(vec1, vec2)
+                if sim == 1:
+                    sim = word2
+            else:
+                sim = None
+            result.append([id2, sim])
+        return result
+
+    @classmethod
+    def get_all_similarity_new(cls, word1):
+        result = []
+        vec1 = cls.loaded_words.get(word1)
         if vec1 is None:
             return None
         for word2, id_len in pedantix_game.word_mapping.items():
@@ -133,7 +164,7 @@ class pedantix_game:
         cls.title, cls.text = get_wiki_page("Alphonse Michon-Dumarais")
         cls.format_text(cls.title, cls.text)
         cls.make_data_set()
-        DB.load_vectors(cls.words)
+        DB.loaded_words = DB.load_db()
 
     @classmethod
     def format_text(cls, title, text):
@@ -233,7 +264,7 @@ def routes():
     def pedantix_guess():
         result = request.get_json()
         word = result['word']
-        res = DB.get_all_similarity(word)
+        res = DB.get_all_similarity_new(word)
         return jsonify(res)
 
 
