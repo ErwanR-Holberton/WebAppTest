@@ -16,8 +16,8 @@ def routes():
     def indexDB():
         return "Nothing to see, it's a DB"
 
-    @app.route(prefix + "PUT")
-    def DB_PUT():
+    @app.route(prefix + "READ")
+    def DB_READ():
         try:
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
@@ -36,4 +36,26 @@ def routes():
         except mysql.connector.Error as err:
             return f"Error accessing MySQL: {err}"
 
+    @app.route(prefix + 'PUT', methods=['PUT'])
+    def add_words():
+        try:
+            words = request.json.get('words', [])
 
+            if not isinstance(words, list):
+                return jsonify({'error': 'Invalid input format. Expected JSON array.'}), 400
+
+            connection = mysql.connector.connect(**db_config)
+            cursor = connection.cursor()
+
+            for word, vector in words:
+                insert_query = "INSERT INTO words (word, vector) VALUES (%s, %s);"
+                cursor.execute(insert_query, (word, vector))
+
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+            return 'ok', 200
+
+        except mysql.connector.Error as err:
+            return f"Error accessing MySQL: {err}", 500
