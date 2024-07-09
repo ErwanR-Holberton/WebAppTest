@@ -31,7 +31,7 @@ def routes():
             connection.close()
 
             # Render a template to display the words
-            return render_template('words.html', words=words)
+            return render_template(prefix + 'words.html', words=words)
 
         except mysql.connector.Error as err:
             return f"Error accessing MySQL: {err}"
