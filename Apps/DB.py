@@ -1,5 +1,6 @@
 from FlaskApp import *
 prefix = "/DB/"
+import mysql.connector
 from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE
 
 db_config = {
