@@ -9,6 +9,33 @@ dt = 1
 class DB:
     database_path = 'skip1000-100.txt'
     loaded_words = {}
+    links = {"a": "1FL9p5FQ5DdYSxwbJ9G2MYcFkA8hMrci2",
+            "b": "1S6a215EWZr2hDFN5VyF8HbLGAQdDMeF7",
+            "c": "1D4r4ppK-0Na26kGH_E-bLQdLT4jSt-fO",
+            "d": "1aZqndbvOaYCe2_T7y94GiqYEtGP_4mPP",
+            "e": "1Hg_fu89EEs-Mq9wIqlXYCSEr3qLL4C2I",
+            "f": "1VN1DvA2l5TonICjI1W2g3s3tsiCUsfaU",
+            "g": "1yQdDUqgpuTfm9C821tPxcAsoM9NNTMvX",
+            "h": "1UEBP_VYLE98TjP5VeOTvqhtYNYSU_-76",
+            "i": "192Hp5axdv-Y9AM6Fm0lUfFapfW3NLj4j",
+            "j": "1S5Ljw1-ISOtkUwNZhkGEOJiEehqFuGuZ",
+            "k": "1G7ghngKB2otYoQPFQxNVYql5bcnfQWgF",
+            "l": "1bq6D7WNjomjgMPQ6o2na-_2zgQgvyvDB",
+            "m": "17tIK7AYIzIFxGAo6jgob3STivrN1Ymo8",
+            "n": "1_9EIKmeK9ERZ_Z5mzqOpDGqFEIxj1kxs",
+            "o": "1YAMtnWu7nj87OBLm5fXMUCztBAZtN707",
+            "p": "1L16xOflrF2HLYZ5j7NWb7lj0hVlZfIBY",
+            "q": "1g6D9eJWwPC6EbJH-Reye9aaBy826RAl4",
+            "r": "1CGNq_Idj6WRb5LkYWeY3tzncn7YG-MqY",
+            "s": "11bhFBZy7nLcoEWogMzcfDWLcLUb260Tf",
+            "t": "11bhFBZy7nLcoEWogMzcfDWLcLUb260Tf",
+            "u": "13ENOBNCgGmsBk5aBt79ixsq9DkbgwVt5",
+            "v": "1G8xL_zmYipzlGqDrUENmwjhkF5AWXgPe",
+            "w": "1z8AWa-qi1FHRKIDeQpsl3cyLKzbB7it3",
+            "x": "11NmjF_pD6vpM5bbUkX-9uXCouQJyIiZC",
+            "y": "1eCSu5RzD32lOnxZMPnjQS0b2tluXGgqs",
+            "z": "1BW_Oo6od-H3OPU9nV_ZhRmXAmjjbktLM",
+            "others": "1OkmNPRJY9UXvSZqJrO8zOByhaXuARs76"}
 
     def load_db():
         url = f'https://drive.usercontent.google.com/download?id=1Mkb7NKOMNV8buxI6gbd8DyTlMuw62iWN&export=download&confirm=t&uuid=7ab09d9e-d08a-4265-a637-2b433db9f605'
@@ -79,16 +106,35 @@ class DB:
             result.append([id2, sim])
         return result
 
+    def get_word(word):
+        if word[0] in DB.links.keys():
+            letter = word[0]
+            file = DB.links[word[0]]
+        else:
+            letter = "other"
+            file = DB.links["others"]
+
+        print("requesting file:", letter)
+        request = requests.get(f"https://drive.google.com/uc?export=download&id={file}")
+        data = {line.split(' ', 1)[0]: line.split(' ', 1)[1] for line in request.text.splitlines()}
+
+        return data.get(word)
+
     @classmethod
     def get_all_similarity_new(cls, word1):
         result = []
         vec1 = cls.loaded_words.get(word1)
         if vec1 is None:
-            return None
+            vec1 = cls.get_word(word1)
+            if vec1 is None:
+                return None
+        vec1 = list(map(float, vec1.split()))
+
         for word2, id_len in pedantix_game.word_mapping.items():
             vec2 = cls.loaded_words.get(word2)
             id2 = id_len[0]
             if vec2 is not None:
+                vec2 = list(map(float, vec2.split()))
                 sim = cls.cosine_similarity(vec1, vec2)
                 if sim == 1:
                     sim = word2
@@ -96,6 +142,45 @@ class DB:
                 sim = None
             result.append([id2, sim])
         return result
+
+    def load_all(words):
+
+        def extract(words, ch):
+            extracted = []
+            i = 0
+            while i < len(words):
+                if words[i][0] == ch:
+                    extracted.append(words[i])
+                    del words[i]
+                else:
+                    i += 1
+            return words, extracted
+
+        def load_words(words):
+            if words[0][0] in DB.links.keys():
+                letter = words[0][0]
+                file = DB.links[words[0][0]]
+            else:
+                letter = "other"
+                file = DB.links["others"]
+
+            print("requesting file:", letter)
+            request = requests.get(f"https://drive.google.com/uc?export=download&id={file}")
+            data = {line.split(' ', 1)[0]: line.split(' ', 1)[1] for line in request.text.splitlines()}
+
+            return {word: data.get(word) for word in words}
+
+        loaded_words = {}
+        for ch in string.ascii_lowercase:
+            words, extracted = extract(words, ch)
+            if extracted != []:
+                loaded_words |= load_words(extracted)
+        if len(words) > 0:
+            loaded_words |= load_words(words)
+        return loaded_words
+
+
+
 
 def get_wiki_page(title=None):
     import requests
@@ -164,6 +249,7 @@ class pedantix_game:
         cls.title, cls.text = get_wiki_page("Alphonse Michon-Dumarais")
         cls.format_text(cls.title, cls.text)
         cls.make_data_set()
+        DB.loaded_words = DB.load_all([w for w in cls.words])
         """DB.loaded_words = DB.load_db()"""
 
     @classmethod
