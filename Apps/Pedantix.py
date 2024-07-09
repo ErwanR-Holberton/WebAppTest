@@ -164,7 +164,7 @@ class pedantix_game:
         cls.title, cls.text = get_wiki_page("Alphonse Michon-Dumarais")
         cls.format_text(cls.title, cls.text)
         cls.make_data_set()
-        DB.loaded_words = DB.load_db()
+        """DB.loaded_words = DB.load_db()"""
 
     @classmethod
     def format_text(cls, title, text):
