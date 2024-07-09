@@ -47,9 +47,13 @@ def routes():
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
 
+            datalen = len(words)
+            count = 0
+
             for word, vector in words:
                 insert_query = "INSERT INTO words (word, vector) VALUES (%s, %s);"
                 cursor.execute(insert_query, (word, vector))
+                count += 1
 
             connection.commit()
             cursor.close()
@@ -58,4 +62,4 @@ def routes():
             return 'ok', 200
 
         except mysql.connector.Error as err:
-            return f"Error accessing MySQL: {err}", 500
+            return f"Error accessing MySQL: {err}\n{datalen}, {count}", 500
