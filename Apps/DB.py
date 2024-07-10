@@ -63,3 +63,25 @@ def routes():
 
         except mysql.connector.Error as err:
             return f"Error accessing MySQL: {err}\n{datalen}, {count}", 500
+
+    @app.route(prefix + "QUERY", methods=['POST'])
+    def DB_READ():
+        try:
+            data = request.json
+            words_to_query = data.get('words', [])
+
+            connection = mysql.connector.connect(**db_config)
+            cursor = connection.cursor()
+
+            query = "SELECT word, vector FROM words WHERE word IN (%s)" % ','.join(['%s'] * len(words_to_query))
+            cursor.execute(query, words_to_query)
+            result = cursor.fetchall()
+
+            cursor.close()
+            connection.close()
+
+            word_vector_dict = {word: vector for word, vector in result}
+            return jsonify(word_vector_dict)
+
+        except mysql.connector.Error as err:
+            return f"Error accessing MySQL: {err}", 500
