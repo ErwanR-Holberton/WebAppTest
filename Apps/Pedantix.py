@@ -24,8 +24,8 @@ class DB:
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
 
-            query = "SELECT word, vector FROM words WHERE word IN (%s)" % ','.join(['%s'] * len(words_to_query))
-            cursor.execute(query, words_to_query)
+            query = "SELECT word, vector FROM words WHERE word IN (%s)" % ','.join(['%s'] * len(words))
+            cursor.execute(query, words)
             result = cursor.fetchall()
 
             cursor.close()
