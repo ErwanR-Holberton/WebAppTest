@@ -69,7 +69,7 @@ def routes():
             data = request.json
             words_to_query = data.get('words', [])
 
-            word_dict = {word: None for word in requested_words}
+            word_dict = {word: None for word in words_to_query}
 
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
