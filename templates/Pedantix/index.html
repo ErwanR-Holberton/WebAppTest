@@ -35,6 +35,7 @@
 			box-shadow: inset 2px 2px 1px var(--summary-edge), 3px 3px 3px var(--back-shadow);
 			border-radius: 25px;
 			min-width: 15em;
+			text-align: center;
 		}
 		aside > p {
 			margin: 0;
@@ -140,11 +141,31 @@
 			border-radius: 5px;
 			color: gray;
 		}
+		#guessed-words-list {
+			list-style: none;
+			color: black;
+		}
+		.side_h4 {
+			color: black;
+		}
+
+		#guessed-words-list > li {
+			left: 0;
+			text-align: left;
+			overflow: hidden;
+			text-wrap: nowrap;
+		}
 	</style>
 </head>
 <body>
 	<aside>
-		{% for word, id_len in words.items() %}<p class="cheat">{{id_len[0]}} : {{ word }}</p>{% endfor %}
+		<h4 class="side_h4">words</h4>
+		<ol id="guessed-words-list">
+
+		</ol>
+		{% if debug %}
+			{% for word, id_len in words.items() %}<p class="cheat">{{id_len[0]}} : {{ word }}</p>{% endfor %}
+		{% endif %}
 
 	</aside>
 	<article>
@@ -162,21 +183,23 @@
 		</form>
 
 		<div id="game">
+			{% if debug %}
 			<details>
-			{% set ns = namespace(counter=1) %}
-			{% for title, items in text %}
-				{% if loop.first %}
-					<h2>{{ title }}</h2>
-				{% else %}
-					<h4>{{ title }}</h4>
-				{% endif %}
+				{% set ns = namespace(counter=1) %}
+				{% for title, items in text %}
+					{% if loop.first %}
+						<h2>{{ title }}</h2>
+					{% else %}
+						<h4>{{ title }}</h4>
+					{% endif %}
 
-				<p class="game_paragraph">
-					{% for item in items %}<span class="w" id="{{ ns.counter }}">{{ item }}</span>{% set ns.counter = ns.counter + 1 %}{% endfor %}
-				</p>
+					<p class="game_paragraph">
+						{% for item in items %}<span class="w" id="{{ ns.counter }}">{{ item }}</span>{% set ns.counter = ns.counter + 1 %}{% endfor %}
+					</p>
 
-			{% endfor %}
-		</details>
+				{% endfor %}
+			</details>
+			{% endif %}
 
 			{% for title, items in dataset %}
 
@@ -196,6 +219,7 @@
 	<script>
 		const data_set = {{ pairs | tojson }};
 		const excludedValues = ["hidden", "revealed"];
+		const guessedWords = [];
 
 		data_set.forEach(item => {
 
@@ -231,21 +255,27 @@
 			.then(data => {
 				console.log('Response:', data);
 				if (data == null) { console.log(word); }
-				
+
 				data.forEach(item => {
 					if (typeof item[1] === 'string') {
+
+						let id = item[0];
+						let array_element = data_set[id];
+						array_element[2] = "revealed"
 						const elements = document.querySelectorAll(`span.id${item[0]}`);
 
 						elements.forEach(element => {
+							console.log(element.id);
 							element.textContent = item[1];
 							element.classList.add('revealed');
 							element.classList.remove('hidden');
+							element.classList.remove('partial_grey');
 						});
 					}
 					else {
 						let id = item[0];
-						let element = data_set[id];
-						let previous_similarity = element[2];
+						let array_element = data_set[id];
+						let previous_similarity = array_element[2];
 						let new_similarity = item[1];
 
 						if (previous_similarity !== 'revealed' && (previous_similarity === 'hidden' || previous_similarity < new_similarity) && new_similarity > 0.3 ) {
@@ -267,8 +297,19 @@
 		document.getElementById('pedantix-guess-btn').addEventListener('click', function(event) {
 			event.preventDefault(); // Prevent default form submission behavior if using a form
 
-			const word = document.getElementById('pedantix-guess').value;
-			sendGuessToServer(word);
+			const input = document.getElementById('pedantix-guess');
+			const word = input.value;
+			input.value = '';
+			if (!guessedWords.includes(word)) {
+				sendGuessToServer(word);
+				guessedWords.push(word);
+
+				const ul = document.getElementById('guessed-words-list');
+				const li = document.createElement('li');
+				const position = guessedWords.length;
+				li.textContent = `${position}. ${word}`;
+				ul.insertBefore(li, ul.firstChild);
+			}
 		});
 
 		function handleClick(event) {

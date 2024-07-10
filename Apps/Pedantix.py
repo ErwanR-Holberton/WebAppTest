@@ -49,7 +49,6 @@ class DB:
 
         if response.status_code == 200:
             result = response.json()
-            print(type(result))
             for word, vector in result.items():
                 if vector is not None:
                     result[word] = [float(x) for x in json.loads(vector)]
@@ -80,29 +79,30 @@ class DB:
 
     @classmethod
     def cosine_similarity(cls, vec1, vec2):
-        print(vec1, vec2)
         dot_product = sum(v1 * v2 for v1, v2 in zip(vec1, vec2))
         magnitude1 = math.sqrt(sum(v ** 2 for v in vec1))
         magnitude2 = math.sqrt(sum(v ** 2 for v in vec2))
         if magnitude1 == 0 or magnitude2 == 0:
-            return 0.0  # Handle division by zero
+            return 0.0
         return dot_product / (magnitude1 * magnitude2)
 
     @classmethod
     def get_all_similarity(cls, word1):
         result = []
         vec1 = cls.load_or_query(word1)
-        if vec1 is None:
-            return None
+
         for word2, id_len in pedantix_game.word_mapping.items():
             vec2 = cls.loaded_words.get(word2)
             id2 = id_len[0]
-            if vec2 is not None:
+            
+            if vec2 is not None and vec1 is not None:
                 sim = cls.cosine_similarity(vec1, vec2)
                 if sim == 1:
                     sim = word2
             else:
                 sim = None
+                if word1 == word2:
+                    sim = word2
             result.append([id2, sim])
         return result
 
@@ -167,6 +167,7 @@ def categorize(ch):
 
 class pedantix_game:
     start_time = None
+    debug = False
 
     @classmethod
     def new_game(cls):
@@ -175,6 +176,9 @@ class pedantix_game:
         cls.format_text(cls.title, cls.text)
         cls.make_data_set()
         DB.loaded_words = DB.QUERY([w for w in cls.words])
+        for word, vec in DB.loaded_words.items():
+            if vec is None:
+                print(word)
 
 
     @classmethod
@@ -210,7 +214,6 @@ class pedantix_game:
                 pair_head_text.append(elements)
                 pair_head_text[-1][0] = tokenize(pair_head_text[-1][0])
                 pair_head_text[-1][1] = tokenize(pair_head_text[-1][1])
-                """print(pair_head_text[-1])"""
 
         cls.array = pair_head_text
 
@@ -221,6 +224,7 @@ class pedantix_game:
         args['pairs'] = cls.pair_id_len
         args['words'] = cls.word_mapping
         args['dataset'] = cls.data_set
+        args['debug'] = cls.debug
         return args
 
     @classmethod
