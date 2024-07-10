@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from FlaskApp import *
-import re, string, math, requests, json
+import re, string, math, requests, json, mysql.connector
 from datetime import datetime, timedelta
 from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE
 
