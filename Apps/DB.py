@@ -81,7 +81,7 @@ def routes():
             cursor.close()
             connection.close()
 
-            for word, vector in results:
+            for word, vector in result:
                 word_dict[word] = vector
 
             return jsonify(word_dict)
