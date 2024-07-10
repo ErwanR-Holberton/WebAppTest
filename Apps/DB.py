@@ -65,7 +65,7 @@ def routes():
             return f"Error accessing MySQL: {err}\n{datalen}, {count}", 500
 
     @app.route(prefix + "QUERY", methods=['POST'])
-    def DB_READ():
+    def DB_QUERY():
         try:
             data = request.json
             words_to_query = data.get('words', [])
