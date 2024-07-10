@@ -16,6 +16,7 @@ def routes():
     def indexDB():
         return "Nothing to see, it's a DB"
 
+    """
     @app.route(prefix + "READ")
     def DB_READ():
         try:
@@ -47,9 +48,6 @@ def routes():
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
 
-            datalen = len(words)
-            count = 0
-
             for word, vector in words:
                 insert_query = "INSERT INTO words (word, vector) VALUES (%s, %s);"
                 cursor.execute(insert_query, (word, vector))
@@ -62,13 +60,16 @@ def routes():
             return 'ok', 200
 
         except mysql.connector.Error as err:
-            return f"Error accessing MySQL: {err}\n{datalen}, {count}", 500
+            return f"Error accessing MySQL: {err}", 500
+    """
 
     @app.route(prefix + "QUERY", methods=['POST'])
     def DB_QUERY():
         try:
             data = request.json
             words_to_query = data.get('words', [])
+
+            word_dict = {word: None for word in requested_words}
 
             connection = mysql.connector.connect(**db_config)
             cursor = connection.cursor()
@@ -80,8 +81,10 @@ def routes():
             cursor.close()
             connection.close()
 
-            word_vector_dict = {word: vector for word, vector in result}
-            return jsonify(word_vector_dict)
+            for word, vector in results:
+                word_dict[word] = vector
+
+            return jsonify(word_dict)
 
         except mysql.connector.Error as err:
             return f"Error accessing MySQL: {err}", 500
