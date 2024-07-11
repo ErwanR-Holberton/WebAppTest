@@ -22,10 +22,12 @@ data = [
     ["Tarek"        , "C23", "1990", "M", "1.80m", "3", "Fondamentaux 2"],
 
     ["Florian M"    , "C22", "1991", "M", "1.70m", "1", "Fondamentaux 3"],
+    ["Florian V"    , "C22", "1991", "M", "1.87m", "3", "Fondamentaux 3"],
 
     ["Erwan R"      , "C21", "1996", "M", "1.80m", "2", "AR/VR"],
     ["Kévin"        , "C21", "1991", "M", "1.74m", "3", "AR/VR"],
     ["Gaël"         , "C21", "1987", "M", "1.69m", "1", "AR/VR"],
+    ["Solomon"      , "C21", "1993", "M", "1.78m", "3", "Cyber"],
     ["Arnaud  "     , "C20", "2001", "M", "1.69m", "0.5", "AR/VR"],
 
     ["Alexandre G"  , "C21", "1994", "M", "1.72m", "4", "FS"],
