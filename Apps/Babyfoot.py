@@ -15,7 +15,7 @@ def Read_Table(table_name):
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    query = "SELECT COUNT(*) FROM {table_name}".format(table_name=table_name)
+    query = "SELECT COUNT(*) FROM {table_name};".format(table_name=table_name)
     cursor.execute(query)
     result = cursor.fetchall()
 
