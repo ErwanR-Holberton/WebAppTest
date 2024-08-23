@@ -22,7 +22,7 @@ def Read_Table(table_name):
 
     cursor.close()
     connection.close()
-    print(result)
+    return result
 
 
 def routes():
@@ -83,5 +83,5 @@ def routes():
 
     @app.route(prefix + "Players")
     def Babyfoot_Players():
-        Read_Table("words")
-        return render_template(prefix + "Players.html")
+        players = Read_Table("words")
+        return render_template(prefix + "Players.html", players=players)
