@@ -1,13 +1,13 @@
 from FlaskApp import *
 prefix = "/Babyfoot/"
 import mysql.connector
-from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, DB_babyfoot
+from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE
 
 db_config = {
     'user': MYSQL_USER,
     'password': MYSQL_PASSWORD,
     'host': MYSQL_HOST,
-    'database': DB_babyfoot,
+    'database': MYSQL_DATABASE,
     'port': 3306,
 }
 
@@ -15,8 +15,8 @@ def Read_Table(table_name):
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    query = "SELECT * FROM {table_name}".format(table_name=table_name)
-    cursor.execute(query, words_to_query)
+    query = "SELECT COUNT(*) FROM {table_name}".format(table_name=table_name)
+    cursor.execute(query)
     result = cursor.fetchall()
 
 
@@ -83,5 +83,5 @@ def routes():
 
     @app.route(prefix + "Players")
     def Babyfoot_Players():
-        Read_Table("Player")
+        Read_Table("words")
         return render_template(prefix + "Players.html")
