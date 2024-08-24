@@ -1,13 +1,13 @@
 from FlaskApp import *
 prefix = "/Babyfoot/"
 import mysql.connector
-from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE
+from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, DB_babyfoot
 
 db_config = {
     'user': MYSQL_USER,
     'password': MYSQL_PASSWORD,
     'host': MYSQL_HOST,
-    'database': MYSQL_DATABASE,
+    'database': DB_babyfoot,
     'port': 3306,
 }
 
@@ -83,5 +83,5 @@ def routes():
 
     @app.route(prefix + "Players")
     def Babyfoot_Players():
-        players = Read_Table("words")
+        players = Read_Table("Player")
         return render_template(prefix + "Players.html", players=players)
