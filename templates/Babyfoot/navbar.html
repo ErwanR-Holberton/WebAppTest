@@ -1,9 +1,40 @@
 <header>
-    <nav>
+    <nav id="header_nav">
         <ul>
-            <li><a href="{{ url_for('/Babyfoot') }}">Home</a></li>
-            <li><a href="{{ url_for('/Babyfoot/matches') }}">Matches</a></li>
-            <li><a href="{{ url_for('/Babyfoot/players') }}">Players</a></li>
+            <li><a href="{{ url_for('Babyfoot_matches') }}">Matches</a></li>
+            <li><a href="{{ url_for('Babyfoot_Players') }}">Players</a></li>
+            <li><a href="{{ url_for('Insert_Babyfoot_Players') }}">Insert Players</a></li>
         </ul>
     </nav>
 </header>
+<style>
+    #header_nav {
+        text-align: center; /* Center the entire navigation bar */
+    }
+
+    #header_nav ul {
+        display: inline-block; /* Makes the ul content as wide as its elements */
+        list-style-type: none; /* Removes default bullet points */
+        margin: 0;             /* Removes default margin */
+        padding: 0;            /* Removes default padding */
+        background-color: #333; /* Sets the background color for the nav bar */
+        border-radius: 8px;    /* Adds rounded corners to the nav bar */
+    }
+
+    #header_nav ul li {
+        display: inline;       /* Aligns list items horizontally */
+    }
+
+    #header_nav ul li a {
+        display: inline-block; /* Keeps links aligned horizontally */
+        color: white;          /* Text color */
+        text-align: center;    /* Centers the text */
+        padding: 14px 16px;    /* Adds padding inside the link */
+        text-decoration: none; /* Removes the underline from links */
+    }
+
+    #header_nav ul li a:hover {
+        background-color: #111; /* Changes background on hover */
+        border-radius: 4px;     /* Adds rounded corners to the hover effect */
+    }
+</style>

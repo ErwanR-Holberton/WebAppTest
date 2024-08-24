@@ -114,4 +114,8 @@ def routes():
     def Babyfoot_matches():
         limit = request.args.get('limit', default=None, type=int)
         match_data = Request_Matches(limit)
-        return render_template(prefix + 'Matches.html', matches=match_data)
+        return render_template(prefix + 'Matches.html', matches=match_data)   
+     
+    @app.route(prefix + 'test')
+    def eetete():
+        return render_template(prefix + 'test.html')
