@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Player</title>
+</head>
+<body>
+    <h1>Add a New Player</h1>
+
+    <form id="playerForm">
+        <label for="username">Enter Player Name:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Add Player</button>
+    </form>
+
+    <h2>Last Response</h2>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('playerForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const username = document.getElementById('username').value;
+            const data = { username: username };    // Create the payload to send in the POST request
+
+            // Send the POST request to the /add_player route
+            fetch('/Babyfoot/Insert_Player', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').textContent = data.message; // Display the server response in the response div
+            })
+            .catch(error => {
+                document.getElementById('response').textContent = 'Error: ' + error;
+            });
+            document.getElementById('username').value = '';     // Optionally, clear the input field after submission
+        });
+    </script>
+</body>
+</html>
