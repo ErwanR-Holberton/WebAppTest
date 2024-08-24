@@ -16,7 +16,7 @@
         }
     </style>
 </head>
-<body>
-    <div>{{ player }}</div>
-</body>
+    {% for player in players %}
+        <div>{{ player }}</div>
+    {% endfor %}
 </html>

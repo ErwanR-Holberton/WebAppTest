@@ -15,14 +15,14 @@ def Read_Table(table_name):
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    query = "SELECT COUNT(*) FROM {table_name};".format(table_name=table_name)
+    query = f"SELECT * FROM `{table_name}` LIMIT 10;"
     cursor.execute(query)
     result = cursor.fetchall()
 
 
     cursor.close()
     connection.close()
-    return result[0]
+    return result
 
 
 def routes():
