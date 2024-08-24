@@ -55,6 +55,36 @@ def Create_Player(username):
             connection.close()
     return result
 
+def Request_Matches(limit):
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
+
+    query = """
+    SELECT
+        m.id AS match_id,
+        m.score_team_1,
+        m.score_team_2,
+        m.date AS match_date,
+        GROUP_CONCAT(CASE WHEN mp.team = 1 THEN p.username ELSE NULL END) AS team1_players,
+        GROUP_CONCAT(CASE WHEN mp.team = 2 THEN p.username ELSE NULL END) AS team2_players 
+    FROM Game_Match m 
+    JOIN Match_Players mp ON m.id = mp.match_id 
+    JOIN Player p ON mp.user_id = p.id G
+    ROUP BY m.id, m.score_team_1, m.score_team_2, m.date;
+    """
+    
+    
+    if limit is not None:   # Add the LIMIT clause if a limit is specified
+        query += " LIMIT %s"
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+
+    cursor.close()
+    connection.close()
+    return result
+
 def routes():
     @app.route(prefix)
     def Babyfoot():
@@ -79,3 +109,9 @@ def routes():
     @app.route(prefix + "Add_Player")
     def Add_Babyfoot_Players():
         return render_template(prefix + "Add_Player.html")
+    
+    @app.route(prefix + 'matches', methods=['GET'])
+    def Babyfoot_matches():
+        limit = request.args.get('limit', default=None, type=int)
+        match_data = Request_Matches(limit)
+        return render_template(prefix + 'Matches.html', matches=match_data)
