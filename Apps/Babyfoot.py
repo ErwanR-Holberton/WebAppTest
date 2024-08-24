@@ -22,7 +22,7 @@ def Read_Table(table_name):
 
     cursor.close()
     connection.close()
-    return result
+    return result[0]
 
 
 def routes():
