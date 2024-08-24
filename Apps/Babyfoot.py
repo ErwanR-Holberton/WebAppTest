@@ -31,7 +31,7 @@ def Create_Player(username):
     cursor = connection.cursor()
 
     check_query = "SELECT COUNT(*) FROM Player WHERE username = %s;"
-    cursor.execute(check_query, (username))
+    cursor.execute(check_query, (username,))
     count = cursor.fetchone()[0]
 
     if count > 0:
@@ -41,7 +41,7 @@ def Create_Player(username):
 
         try:
         
-            cursor.execute(query, (username))    # Execute the query with the provided username
+            cursor.execute(query, (username,))    # Execute the query with the provided username
             
         
             connection.commit()    # Commit the transaction to the database
