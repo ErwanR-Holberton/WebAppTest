@@ -69,8 +69,8 @@ def Request_Matches(limit):
         GROUP_CONCAT(CASE WHEN mp.team = 2 THEN p.username ELSE NULL END) AS team2_players 
     FROM Game_Match m 
     JOIN Match_Players mp ON m.id = mp.match_id 
-    JOIN Player p ON mp.user_id = p.id G
-    ROUP BY m.id, m.score_team_1, m.score_team_2, m.date;
+    JOIN Player p ON mp.user_id = p.id 
+    GROUP BY m.id, m.score_team_1, m.score_team_2, m.date;
     """
     
     
