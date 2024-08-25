@@ -124,3 +124,9 @@ def routes():
     def Babyfoot_Add_Match():
         players = Read_Table("Player")
         return render_template(prefix + 'Add_Match.html', players=players)
+    
+    @app.route('/dev_submit_match', methods=['POST'])
+    def dev_submit_match():
+        data = request.json
+        print(data)
+        return "ok"
