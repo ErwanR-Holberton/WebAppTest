@@ -24,6 +24,8 @@ def Read_Table(table_name):
 
     cursor.close()
     connection.close()
+    if table_name == "Player":
+        return [s for number, s in result]
     return result
 
 
