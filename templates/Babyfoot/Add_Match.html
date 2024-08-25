@@ -108,5 +108,30 @@
             <button type="submit">Submit Match</button>
         </div>
     </form>
+    <script>
+        function submitData() {
+            const formData = {
+                name: 'name',
+                email: 'email',
+                message: 'message'
+            };
+
+            fetch('https://https://erhbtn.pythonanywhere.com/Babyfoot/dev_submit_match', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Data submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the data.');
+            });
+        }
+        submitData();
+    </script>
 </body>
 </html>
