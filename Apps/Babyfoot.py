@@ -88,7 +88,7 @@ def Request_Matches(limit):
 def routes():
     @app.route(prefix)
     def Babyfoot():
-        return "Nothing to see, it's a DB"
+        return render_template(prefix + "navbar.html")
 
     @app.route(prefix + "Players")
     def Babyfoot_Players():
@@ -119,3 +119,8 @@ def routes():
     @app.route(prefix + 'test')
     def eetete():
         return render_template(prefix + 'test.html')
+    
+    @app.route(prefix + 'Add_Match')
+    def Babyfoot_Add_Match():
+        players = Read_Table("Player")
+        return render_template(prefix + 'Add_Match.html', players=players)

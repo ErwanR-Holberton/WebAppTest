@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Data Input</title>
+</head>
+<body>
+    <h1>Enter Match Data</h1>
+    <form action="/submit_match" method="POST">
+        <div>
+            <label for="team1">Team 1:</label>
+            <select name="team1_players" id="team1_players" multiple>
+                {% for player in players %}
+                    <option value="{{ player }}">{{ player }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="team2">Team 2:</label>
+            <select name="team2_players" id="team2_players" multiple>
+                {% for player in players %}
+                    <option value="{{ player }}">{{ player }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="team1_score">Team 1 Score:</label>
+            <input type="number" id="team1_score" name="team1_score" required>
+        </div>
+
+        <div>
+            <label for="team2_score">Team 2 Score:</label>
+            <input type="number" id="team2_score" name="team2_score" required>
+        </div>
+
+        <div>
+            <label for="match_date">Match Date (optional):</label>
+            <input type="date" id="match_date" name="match_date">
+        </div>
+
+        <div>
+            <button type="submit">Submit Match</button>
+        </div>
+    </form>
+</body>
+</html>
