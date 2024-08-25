@@ -133,7 +133,7 @@ def create_match_and_players(team1_players, team2_players, score1, score2, date=
 
         # Insert into the Match table
         match_query = """
-        INSERT INTO Match (score_team_1, score_team_2, date, game)
+        INSERT INTO Game_Match (score_team_1, score_team_2, date, game)
         VALUES (%s, %s, %s, %s)
         """
         match_values = (score1, score2, date, 1)  # 'game' is a fixed value, 1 for babyfoot
