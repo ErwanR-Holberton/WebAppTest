@@ -125,7 +125,7 @@ def routes():
         players = Read_Table("Player")
         return render_template(prefix + 'Add_Match.html', players=players)
     
-    @app.route('/dev_submit_match', methods=['POST'])
+    @app.route(prefix + '/dev_submit_match', methods=['POST'])
     def dev_submit_match():
         data = request.json
         print(data)
