@@ -12,6 +12,8 @@ db_config = {
 }
 
 def Read_Table(table_name):
+    if "--github" in argv:
+        return ["Erwan", "Nat", "Sol", "Alex"]
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
@@ -133,5 +135,7 @@ def routes():
         team1_score = request.form.get('team1_score')
         team2_score = request.form.get('team2_score')
         match_date = request.form.get('match_date') 
+
+        data = request.form.to_dict(flat=False)
         
-        return f"{players} {team1_players} {team1_score} {team2_players} {team2_score} {match_date}"
+        return f"{players} {team1_players} {team1_score} {team2_players} {team2_score} {match_date}<br>{data}"
