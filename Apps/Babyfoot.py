@@ -113,7 +113,7 @@ def get_user_ids_from_usernames(cursor, usernames):
     if not usernames:
         return {}
     
-    query = "SELECT username, id FROM Users WHERE username IN (%s)" % ','.join(['%s'] * len(usernames))
+    query = "SELECT username, id FROM Player WHERE username IN (%s)" % ','.join(['%s'] * len(usernames))
     cursor.execute(query, usernames)
     user_id_map = {username: user_id for username, user_id in cursor.fetchall()}
     
