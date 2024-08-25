@@ -42,9 +42,9 @@ def check_players(players_to_check):
         cursor.execute(query, players_to_check)
         count = cursor.fetchone()[0]    # Fetch the count of matching items
         
-        
-        return count == len(players_to_check) # Check if all players are in the list
-    
+        if count != len(players_to_check) # Check if all players are in the list
+            return count
+        return True
     finally:
         cursor.close()
         connection.close()
@@ -221,5 +221,6 @@ def routes():
                 return e
             finally:
                 return "all players good"
+        return check_players(team1_players + team1_players)
         
         return f"{team1_players} {team1_score} {team2_players} {team2_score} {match_date}<br>{data}"
