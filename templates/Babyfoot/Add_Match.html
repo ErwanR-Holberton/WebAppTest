@@ -68,70 +68,74 @@
     </style>
 </head>
 <body>
-    <form action="{{ url_for('dev_submit_match') }}" method="POST">
+    <form id="match-form" action="{{ url_for('dev_submit_match') }}" method="POST">
         <h1>Enter Match Data</h1>
-
+    
         <div>
             <label for="team1">Team 1:</label>
-            <select name="team1_players" id="team1_players" multiple required>
+            <select id="team1_players" multiple size="10">
                 {% for player in players %}
                     <option value="{{ player }}">{{ player }}</option>
                 {% endfor %}
             </select>
+            <button type="button" onclick="movePlayer('team1')">Add to Team 1</button>
         </div>
-
+    
         <div>
             <label for="team2">Team 2:</label>
-            <select name="team2_players" id="team2_players" multiple required>
+            <select id="team2_players" multiple size="10">
                 {% for player in players %}
                     <option value="{{ player }}">{{ player }}</option>
                 {% endfor %}
             </select>
+            <button type="button" onclick="movePlayer('team2')">Add to Team 2</button>
         </div>
-
+    
+        <div>
+            <label for="team1_selected">Selected Team 1:</label>
+            <select id="team1_selected" name="team1_players" multiple size="10"></select>
+        </div>
+    
+        <div>
+            <label for="team2_selected">Selected Team 2:</label>
+            <select id="team2_selected" name="team2_players" multiple size="10"></select>
+        </div>
+    
         <div>
             <label for="team1_score">Team 1 Score:</label>
             <input type="number" id="team1_score" name="team1_score" required>
         </div>
-
+    
         <div>
             <label for="team2_score">Team 2 Score:</label>
             <input type="number" id="team2_score" name="team2_score" required>
         </div>
-
+    
         <div>
             <label for="match_date">Match Date (optional):</label>
             <input type="date" id="match_date" name="match_date">
         </div>
-
+    
         <div>
             <button type="submit">Submit Match</button>
         </div>
     </form>
+    
     <script>
-        function submitData() {
-            const formData = {
-                name: 'name',
-                email: 'email',
-                message: 'message'
-            };
-
-            fetch('https://https://erhbtn.pythonanywhere.com/Babyfoot/dev_submit_match', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Data submitted successfully!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An error occurred while submitting the data.');
-            });
-        }
-        submitData();
+    function movePlayer(team) {
+        // Determine the source and destination based on the team
+        const availableSelect = document.querySelector(`#${team === 'team1' ? 'team1_players' : 'team2_players'}`);
+        const selectedSelect = document.querySelector(`#${team}_selected`);
+    
+        // Get selected options from the available select
+        const selectedOptions = Array.from(availableSelect.selectedOptions);
+    
+        // Move selected options to the selected select
+        selectedOptions.forEach(option => {
+            selectedSelect.add(option);
+            availableSelect.remove(option.index);
+        });
+    }
     </script>
 </body>
 </html>
