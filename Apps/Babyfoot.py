@@ -216,7 +216,9 @@ def routes():
 
         if check_players(team1_players + team1_players):
             try:
-                create_match_and_players(team1_players, team2_players, team1_score, team2_score,date)
+                create_match_and_players(team1_players, team2_players, team1_score, team2_score,match_date)
+            except Exception as e:
+                return e
             finally:
                 return "all players good"
         
