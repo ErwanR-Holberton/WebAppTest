@@ -42,7 +42,7 @@ def check_players(players_to_check):
         cursor.execute(query, players_to_check)
         count = cursor.fetchone()[0]    # Fetch the count of matching items
         
-        if count != len(players_to_check) # Check if all players are in the list
+        if count != len(players_to_check): # Check if all players are in the list
             return count
         return True
     finally:
