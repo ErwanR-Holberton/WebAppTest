@@ -219,8 +219,6 @@ def routes():
                 create_match_and_players(team1_players, team2_players, team1_score, team2_score,match_date)
             except Exception as e:
                 return e
-            finally:
-                return "all players good"
         return check_players(team1_players + team1_players)
         
         return f"{team1_players} {team1_score} {team2_players} {team2_score} {match_date}<br>{data}"
