@@ -127,6 +127,6 @@ def routes():
     
     @app.route(prefix + '/dev_submit_match', methods=['POST'])
     def dev_submit_match():
-        data = request.json
+        data = request.form.to_dict(flat=False)
         print(data)
         return "ok"
