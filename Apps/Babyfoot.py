@@ -186,8 +186,8 @@ def routes():
     @app.route(prefix + '/dev_submit_match', methods=['POST'])
     def dev_submit_match():
         players = Read_Table("Player")
-        team1_players = request.form.getlist('team1_players')
-        team2_players = request.form.getlist('team2_players')
+        team1_players = request.form.getlist('team1_players')[0].split(",")
+        team2_players = request.form.getlist('team2_players')[0].split(",")
         team1_score = request.form.get('team1_score')
         team2_score = request.form.get('team2_score')
         match_date = request.form.get('match_date') 
