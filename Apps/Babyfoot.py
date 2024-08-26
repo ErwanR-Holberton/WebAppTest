@@ -200,5 +200,12 @@ def routes():
                 return "OK"
             except Exception as e:
                 return e
+        else:
+            missing_from_team1 = [name for name in team1_players if name not in players]
+            missing_from_team2 = [name for name in team2_players if name not in players]
+            return {
+                "missing_from_team1": missing_from_team1,
+                "missing_from_team2": missing_from_team2
+            }
         
         return f"{team1_players} {team1_score} {team2_players} {team2_score} {match_date}<br>{data}"
