@@ -30,6 +30,7 @@ def Read_Table(table_name):
 
 def check_players(players_to_check):
     connection = mysql.connector.connect(**db_config)
+    result = False
     
     try:
         cursor = connection.cursor()
@@ -43,11 +44,13 @@ def check_players(players_to_check):
         count = cursor.fetchone()[0]    # Fetch the count of matching items
         
         if count != len(players_to_check): # Check if all players are in the list
-            return count
-        return True
+            result = count
+        else:
+            result = True
     finally:
         cursor.close()
         connection.close()
+        return result
 
 def Create_Player(username):
     # Establish a connection to the database
