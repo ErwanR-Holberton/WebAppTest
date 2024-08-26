@@ -41,7 +41,7 @@
         </thead>
         <tbody>
             {% for match in matches %}
-            <tr>
+            <tr data-match-id="{{ match[0] }}">
                 <td>{{ match[3] }}</td>
                 <td>{{ match[4] }}</td>
                 <td>{{ match[1] }}</td>

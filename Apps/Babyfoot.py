@@ -73,7 +73,9 @@ def Request_Matches(limit):
     FROM Game_Match m 
     JOIN Match_Players mp ON m.id = mp.match_id 
     JOIN Player p ON mp.user_id = p.id 
+    WHERE m.game = 1
     GROUP BY m.id, m.score_team_1, m.score_team_2, m.date;
+    ORDER BY m.date DESC;
     """
     
     
@@ -218,5 +220,3 @@ def routes():
                 "missing_from_team1": missing_from_team1,
                 "missing_from_team2": missing_from_team2
             }
-        
-        return f"{team1_players} {team1_score} {team2_players} {team2_score} {match_date}<br>{data}"
