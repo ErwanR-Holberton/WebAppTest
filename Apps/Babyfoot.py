@@ -28,30 +28,6 @@ def Read_Table(table_name):
         return [s for number, s in result]
     return result
 
-def check_players(players_to_check):
-    connection = mysql.connector.connect(**db_config)
-    result = False
-    
-    try:
-        cursor = connection.cursor()
-
-        query = f"""
-        SELECT COUNT(*) FROM Player
-        WHERE username IN ({', '.join(['%s'] * len(players_to_check))})
-        """
-
-        cursor.execute(query, players_to_check)
-        count = cursor.fetchone()[0]    # Fetch the count of matching items
-        
-        if count != len(players_to_check): # Check if all players are in the list
-            result = count
-        else:
-            result = True
-    finally:
-        cursor.close()
-        connection.close()
-        return result
-
 def Create_Player(username):
     # Establish a connection to the database
     connection = mysql.connector.connect(**db_config)
@@ -209,6 +185,7 @@ def routes():
     
     @app.route(prefix + '/dev_submit_match', methods=['POST'])
     def dev_submit_match():
+        players = Read_Table("Player")
         team1_players = request.form.getlist('team1_players')
         team2_players = request.form.getlist('team2_players')
         team1_score = request.form.get('team1_score')
@@ -217,11 +194,11 @@ def routes():
 
         data = request.form.to_dict(flat=False)
 
-        if check_players(team1_players + team1_players):
+        if all(name in players for name in team1_players) and all(name in players for name in team2_players):
             try:
                 create_match_and_players(team1_players, team2_players, team1_score, team2_score,match_date)
+                return "OK"
             except Exception as e:
                 return e
-        return str(check_players(team1_players + team1_players))
         
         return f"{team1_players} {team1_score} {team2_players} {team2_score} {match_date}<br>{data}"
