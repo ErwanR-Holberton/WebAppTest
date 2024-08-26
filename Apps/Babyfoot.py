@@ -193,6 +193,9 @@ def routes():
         match_date = request.form.get('match_date') 
 
         data = request.form.to_dict(flat=False)
+        print("-----------------------")
+        print(team1_players)
+        print(team2_players)
 
         if all(name in players for name in team1_players) and all(name in players for name in team2_players):
             try:
