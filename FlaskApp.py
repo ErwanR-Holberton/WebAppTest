@@ -3,6 +3,7 @@ from sys import argv
 
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key_here'
 
 
 if "--local" in argv:
