@@ -204,21 +204,14 @@ def routes():
         team2_score = request.form.get('team2_score')
         match_date = request.form.get('match_date') 
 
-        data = request.form.to_dict(flat=False)
-        print("-----------------------")
-        print(team1_players)
-        print(team2_players)
-
         if all(name in players for name in team1_players) and all(name in players for name in team2_players):
             try:
                 create_match_and_players(team1_players, team2_players, team1_score, team2_score,match_date)
-                return "OK"
+                flash('Your form was successfully submitted!', 'success')
             except Exception as e:
-                return e
+                flash(e, 'error')
         else:
             missing_from_team1 = [name for name in team1_players if name not in players]
             missing_from_team2 = [name for name in team2_players if name not in players]
-            return {
-                "missing_from_team1": missing_from_team1,
-                "missing_from_team2": missing_from_team2
-            }
+            flash(f"missing_from_team1: {missing_from_team1}, missing_from_team2: {missing_from_team2}", 'error')
+        return redirect(url_for('Babyfoot_Add_Match'))
