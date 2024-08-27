@@ -1,6 +1,6 @@
 from FlaskApp import *
 prefix = "/Babyfoot/"
-import datetime
+from datetime import datetime
 import mysql.connector
 from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, DB_babyfoot
 
