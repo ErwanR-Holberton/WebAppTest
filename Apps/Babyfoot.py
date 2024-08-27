@@ -183,7 +183,7 @@ def routes():
     def Babyfoot_matches():
         limit = request.args.get('limit', default=None, type=int)
         match_data = Request_Matches(limit)
-        match_data.sort(key=lambda x: datetime.strptime(x[3], '%Y-%m-%d'), reverse=True)
+        match_data.sort(key=lambda x: x[3], reverse=True)
         return render_template(prefix + 'Matches.html', matches=match_data)   
      
     @app.route(prefix + 'test')
