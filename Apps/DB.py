@@ -16,7 +16,7 @@ def routes():
     def indexDB():
         return "Nothing to see, it's a DB"
 
-    """
+    
     @app.route(prefix + "READ")
     def DB_READ():
         try:
@@ -30,13 +30,13 @@ def routes():
 
             cursor.close()
             connection.close()
-
+            return jsonify(words)
             # Render a template to display the words
             return render_template(prefix + 'words.html', words=words)
 
         except mysql.connector.Error as err:
             return f"Error accessing MySQL: {err}"
-
+    """
     @app.route(prefix + 'PUT', methods=['PUT'])
     def add_words():
         try:
