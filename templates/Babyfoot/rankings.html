@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Rankings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    {% include 'Babyfoot/navbar.html' %}
+
+    <h1>Player Rankings</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Player ID</th>
+                <th>Username</th>
+                <th>Wins</th>
+                <th>Total Matches</th>
+                <th>Win Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in rankings %}
+            <tr>
+                <td>{{ player[0] }}</td>
+                <td>{{ player[1] }}</td>
+                <td>{{ player[2] }}</td>
+                <td>{{ player[3] }}</td>
+                <td>{{ player[4] }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

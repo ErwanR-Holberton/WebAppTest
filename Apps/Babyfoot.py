@@ -154,6 +154,58 @@ def create_match_and_players(team1_players, team2_players, score1, score2, date=
         cursor.close()
         connection.close()
 
+def get_rankings():
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
+
+    query = """
+    WITH Match_Winners AS (
+    SELECT 
+        GM.id AS match_id,
+        CASE 
+            WHEN GM.score_team_1 > GM.score_team_2 THEN 1
+            WHEN GM.score_team_2 > GM.score_team_1 THEN 2
+            ELSE 0  -- For a draw
+        END AS winning_team
+    FROM Game_Match GM
+    ),
+    Player_Wins AS (
+        SELECT 
+            P.id AS player_id,
+            P.username,
+            COUNT(MP.match_id) AS wins
+        FROM Player P
+        JOIN Match_Players MP ON P.id = MP.user_id
+        JOIN Match_Winners MW ON MP.match_id = MW.match_id
+        WHERE MP.team = MW.winning_team
+        GROUP BY P.id, P.username
+    ),
+    Player_Total_Matches AS (
+        SELECT 
+            P.id AS player_id,
+            COUNT(MP.match_id) AS total_matches
+        FROM Player P
+        JOIN Match_Players MP ON P.id = MP.user_id
+        GROUP BY P.id
+    )
+    SELECT 
+        PW.player_id,
+        PW.username,
+        PW.wins,
+        PTM.total_matches,
+        (PW.wins / PTM.total_matches) * 100 AS win_percentage
+    FROM Player_Wins PW
+    JOIN Player_Total_Matches PTM ON PW.player_id = PTM.player_id
+    ORDER BY win_percentage DESC, PW.wins DESC;
+    """
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    return result
+
 def routes():
     @app.route(prefix)
     def Babyfoot():
@@ -215,3 +267,8 @@ def routes():
             missing_from_team2 = [name for name in team2_players if name not in players]
             flash(f"missing_from_team1: {missing_from_team1}, missing_from_team2: {missing_from_team2}", 'error')
         return redirect(url_for('Babyfoot_Add_Match'))
+
+    @app.route(prefix + 'rankings')
+    def babyfoot_rankings():
+        rankings = get_rankings()
+        return render_template(prefix + 'rankings.html', rankings=rankings)
