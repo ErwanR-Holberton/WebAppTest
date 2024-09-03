@@ -12,5 +12,6 @@ def routes():
 
     @app.route(prefix + 'send', methods=['POST'])
     def send_data_CheckerInjection():
+        print(request.data)
         data.append(request.data)
         return "OK"
