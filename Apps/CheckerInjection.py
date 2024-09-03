@@ -12,6 +12,6 @@ def routes():
 
     @app.route(prefix + 'send', methods=['POST'])
     def send_data_CheckerInjection():
-        print(request.data)
-        data.append(request.data)
+        print(request.data.decode("UTF-8"))
+        data.append(request.data.decode("utf-8"))
         return "OK"
