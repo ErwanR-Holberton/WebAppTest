@@ -29,6 +29,13 @@
 <body>
     {% include 'Babyfoot/navbar.html' %}
     <h1>Matches</h1>
+    <div>
+        <label for="includePlayer">Include Player:</label>
+        <input type="text" id="includePlayer" placeholder="Enter player name...">
+    
+        <label for="excludePlayer">Exclude Player:</label>
+        <input type="text" id="excludePlayer" placeholder="Enter player name...">
+    </div>
     <table>
         <thead>
             <tr>
@@ -39,7 +46,7 @@
                 <th>Team 2</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="matchesTable">
             {% for match in matches %}
             <tr data-match-id="{{ match[0] }}">
                 <td>{{ match[3] }}</td>
@@ -55,5 +62,36 @@
             {% endfor %}
         </tbody>
     </table>
+    <script>
+        // Function to filter matches based on input
+        function filterMatches() {
+            const includePlayer = document.getElementById('includePlayer').value;
+            const excludePlayer = document.getElementById('excludePlayer').value;
+            
+            const rows = document.querySelectorAll('#matchesTable tr');
+            console.log("hello");
+        
+            rows.forEach(row => {
+                const team1 = row.children[1].textContent;
+                const team2 = row.children[4].textContent;
+                
+                // Include filter logic
+                let showRow = !includePlayer || team1.includes(includePlayer) || team2.includes(includePlayer);
+        
+                // Exclude filter logic
+                if (excludePlayer && (team1.includes(excludePlayer) || team2.includes(excludePlayer))) {
+                    showRow = false;
+                }
+    
+        
+                // Show or hide the row
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+        
+        // Add event listeners to the inputs to filter on input change
+        document.getElementById('includePlayer').addEventListener('input', filterMatches);
+        document.getElementById('excludePlayer').addEventListener('input', filterMatches);
+    </script>
 </body>
 </html>

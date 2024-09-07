@@ -60,6 +60,13 @@ def Create_Player(username):
     return result
 
 def Request_Matches(limit):
+    if "--github" in argv:
+        return [[2, 10, 0, "2024-09-06 16:26:48", "Erwan", "Nath"],
+                [3, 10, 0, "2024-09-06 16:26:48", "Erwan,Alex", "Nath"],
+                [4, 10, 0, "2024-09-06 16:26:48", "Erwan,Nicolas", "Nath,Alex"],
+                [5, 10, 0, "2024-09-06 16:26:48", "Erwan,Nicolas", "Nath"],
+                [6, 10, 0, "2024-09-06 16:26:48", "Erwan", "Nath,Nicolas"],
+                [7, 10, 0, "2024-09-06 16:26:48", "Erwan", "Nath"]]
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
@@ -236,7 +243,8 @@ def routes():
         limit = request.args.get('limit', default=None, type=int)
         match_data = Request_Matches(limit)
         match_data.sort(key=lambda x: x[3], reverse=True)
-        return render_template(prefix + 'Matches.html', matches=match_data)   
+        players = Read_Table("Player")
+        return render_template(prefix + 'Matches.html', matches=match_data, players=players)   
      
     @app.route(prefix + 'test')
     def eetete():
