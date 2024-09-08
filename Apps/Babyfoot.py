@@ -278,12 +278,14 @@ def routes():
         one_v_one = {}
         two_v_two_solo_score = {}
         two_v_two_team_score = {}
+        others = {}
 
         def update_score(score_dict, player, is_win):
             score_dict.setdefault(player, [0, 0, None])
             score_dict[player][1] += 1
             if is_win:
                 score_dict[player][0] += 1
+            if score_dict[player][1] != 0:
                 score_dict[player][2] = (score_dict[player][0] / score_dict[player][1]) * 100
 
         for match in Matches_Data:
@@ -301,6 +303,14 @@ def routes():
                     update_score(two_v_two_solo_score, player,sc2 > sc1)
                 update_score(two_v_two_team_score, team1,sc1 > sc2)
                 update_score(two_v_two_team_score, team2,sc2 > sc1)
+            else:
+                for player in team1_names:
+                    update_score(others, player,sc1 > sc2)
+                for player in team2_names:
+                    update_score(others, player,sc2 > sc1)
+
+
+                print(match, "--", two_v_two_team_score.get(team1, "None"), two_v_two_team_score.get(team2, "Score not available"))
 
             for player in team1_names:
                 update_score(global_ranking, player,sc1 > sc2)
@@ -315,7 +325,8 @@ def routes():
             "global_ranking": convert(global_ranking),
             "one_v_one": convert(one_v_one),
             "two_v_two_solo_score": convert(two_v_two_solo_score),
-            "two_v_two_team_score": convert(two_v_two_team_score)
+            "two_v_two_team_score": convert(two_v_two_team_score),
+            "others": convert(others)
         }
 
         return render_template(prefix + 'rankings.html', **args)

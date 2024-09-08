@@ -25,7 +25,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pure CSS Tabs Example</title>
+    <title>Babyfoor: Rankings</title>
     <style>
 
         body {
@@ -78,7 +78,8 @@
         #tab1:checked ~ #content1,
         #tab2:checked ~ #content2,
         #tab3:checked ~ #content3,
-        #tab4:checked ~ #content4 {
+        #tab4:checked ~ #content4,
+        #tab5:checked ~ #content5 {
             display: block;
         }
 
@@ -86,7 +87,8 @@
         #tab1:checked + label,
         #tab2:checked + label,
         #tab3:checked + label,
-        #tab4:checked + label {
+        #tab4:checked + label,
+        #tab5:checked + label {
             background-color: #ddd;
         }
     </style>
@@ -108,6 +110,8 @@
         <label for="tab3">2 v 2 Solo Score</label>
         <input type="radio" name="tabgroup" id="tab4">
         <label for="tab4">2 v 2 Team Score</label>
+        <input type="radio" name="tabgroup" id="tab5">
+        <label for="tab5">Other Matches</label>
         
         <!-- Content for each tab -->
         <div class="tab-content" id="content1">
@@ -124,6 +128,10 @@
 
         <div class="tab-content" id="content4">
             {{ render_table(two_v_two_team_score) }}
+        </div>
+
+        <div class="tab-content" id="content5">
+            {{ render_table(ohers) }}
         </div>
     </div>
 
