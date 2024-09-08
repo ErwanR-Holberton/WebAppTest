@@ -52,4 +52,4 @@ def routes():
 
     @app.route(prefix + "Matches")
     def BabyfootDB_Matches():
-        return Request_Matches()
+        return Request_Matches(None)
