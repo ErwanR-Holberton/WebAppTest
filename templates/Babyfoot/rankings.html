@@ -1,13 +1,37 @@
+{% macro render_table(players) %}
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Wins</th>
+            <th>Total Matches</th>
+            <th>Win Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+        <tr>
+            <td>{{ player[0] }}</td>
+            <td>{{ player[1] }}</td>
+            <td>{{ player[2] }}</td>
+            <td>{{ player[3] }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Rankings</title>
+    <title>Pure CSS Tabs Example</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            text-align: center;
         }
         table {
             width: 100%;
@@ -28,6 +52,43 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+        /* Hide the radio buttons */
+        .tabs input[type="radio"] {
+            display: none;
+        }
+
+        /* Style the labels as tabs */
+        .tabs label {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            margin-right: 2px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Style the tab content */
+        .tab-content {
+            display: none;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        /* Display the content of the checked radio button */
+        #tab1:checked ~ #content1,
+        #tab2:checked ~ #content2,
+        #tab3:checked ~ #content3,
+        #tab4:checked ~ #content4 {
+            display: block;
+        }
+
+        /* Change the background of the selected tab */
+        #tab1:checked + label,
+        #tab2:checked + label,
+        #tab3:checked + label,
+        #tab4:checked + label {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
@@ -35,28 +96,36 @@
 
     <h1>Player Rankings</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Player ID</th>
-                <th>Username</th>
-                <th>Wins</th>
-                <th>Total Matches</th>
-                <th>Win Percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player in rankings %}
-            <tr>
-                <td>{{ player[0] }}</td>
-                <td>{{ player[1] }}</td>
-                <td>{{ player[2] }}</td>
-                <td>{{ player[3] }}</td>
-                <td>{{ player[4] }}%</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    
+    <div class="tabs">
+        
+        <!-- Radio buttons for each tab -->
+        <input type="radio" name="tabgroup" id="tab1" checked>
+        <label for="tab1">Global Ranking</label>
+        <input type="radio" name="tabgroup" id="tab2">
+        <label for="tab2">1 v 1</label>
+        <input type="radio" name="tabgroup" id="tab3">
+        <label for="tab3">2 v 2 Solo Score</label>
+        <input type="radio" name="tabgroup" id="tab4">
+        <label for="tab4">2 v 2 Team Score</label>
+        
+        <!-- Content for each tab -->
+        <div class="tab-content" id="content1">
+            {{ render_table(global_ranking) }}
+        </div>
+
+        <div class="tab-content" id="content2">
+            {{ render_table(one_v_one) }}
+        </div>
+
+        <div class="tab-content" id="content3">
+            {{ render_table(two_v_two_solo_score) }}
+        </div>
+
+        <div class="tab-content" id="content4">
+            {{ render_table(two_v_two_team_score) }}
+        </div>
+    </div>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 from FlaskApp import *
 prefix = "/Babyfoot/"
 from datetime import datetime
-import mysql.connector
+import mysql.connector, requests
 from DB_CONFIG import MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, DB_babyfoot
 
 db_config = {
@@ -13,7 +13,7 @@ db_config = {
 }
 
 def Read_Table(table_name):
-    if "--github" in argv:
+    if LOCAL_MODE:
         return ["Erwan", "Nat", "Sol", "Alex"]
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
@@ -60,13 +60,12 @@ def Create_Player(username):
     return result
 
 def Request_Matches(limit):
-    if "--github" in argv:
-        return [[2, 10, 0, "2024-09-06 16:26:48", "Erwan", "Nath"],
-                [3, 10, 0, "2024-09-06 16:26:48", "Erwan,Alex", "Nath"],
-                [4, 10, 0, "2024-09-06 16:26:48", "Erwan,Nicolas", "Nath,Alex"],
-                [5, 10, 0, "2024-09-06 16:26:48", "Erwan,Nicolas", "Nath"],
-                [6, 10, 0, "2024-09-06 16:26:48", "Erwan", "Nath,Nicolas"],
-                [7, 10, 0, "2024-09-06 16:26:48", "Erwan", "Nath"]]
+    if "--github" in argv or "--local" in argv:
+        try:
+            return requests.get(SERVER_ADDRESS + "/BabyfootDB/Matches").json()
+        except (requests.RequestException, ValueError) as e:
+            print(e)
+            return None
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
@@ -245,10 +244,6 @@ def routes():
         match_data.sort(key=lambda x: x[3], reverse=True)
         players = Read_Table("Player")
         return render_template(prefix + 'Matches.html', matches=match_data, players=players)   
-     
-    @app.route(prefix + 'test')
-    def eetete():
-        return render_template(prefix + 'test.html')
     
     @app.route(prefix + 'Add_Match')
     def Babyfoot_Add_Match():
@@ -278,5 +273,50 @@ def routes():
 
     @app.route(prefix + 'rankings')
     def babyfoot_rankings():
-        rankings = get_rankings()
-        return render_template(prefix + 'rankings.html', rankings=rankings)
+        Matches_Data = Request_Matches(None) or []
+        global_ranking = {}
+        one_v_one = {}
+        two_v_two_solo_score = {}
+        two_v_two_team_score = {}
+
+        def update_score(score_dict, player, is_win):
+            score_dict.setdefault(player, [0, 0, None])
+            score_dict[player][1] += 1
+            if is_win:
+                score_dict[player][0] += 1
+                score_dict[player][2] = (score_dict[player][0] / score_dict[player][1]) * 100
+
+        for match in Matches_Data:
+            id, sc1, sc2, date, team1, team2 = match
+
+            team1_names = team1.split(",")
+            team2_names = team2.split(",")
+            if len(team1_names) == len(team2_names) == 1:
+                update_score(one_v_one, team1,sc1 > sc2)
+                update_score(one_v_one, team2,sc2 > sc1)
+            elif len(team1_names) == len(team2_names) == 2:
+                for player in team1_names:
+                    update_score(two_v_two_solo_score, player,sc1 > sc2)
+                for player in team2_names:
+                    update_score(two_v_two_solo_score, player,sc2 > sc1)
+                update_score(two_v_two_team_score, team1,sc1 > sc2)
+                update_score(two_v_two_team_score, team2,sc2 > sc1)
+
+            for player in team1_names:
+                update_score(global_ranking, player,sc1 > sc2)
+            for player in team2_names:
+                update_score(global_ranking, player,sc2 > sc1)
+
+
+        def convert(arr):
+            return sorted( [[key] + values[0:2] + [f"{values[-1]:.2f}"] for key, values in arr.items() if values[-1] is not None], key=lambda x: float(x[-1]), reverse=True)
+
+        args = {
+            "global_ranking": convert(global_ranking),
+            "one_v_one": convert(one_v_one),
+            "two_v_two_solo_score": convert(two_v_two_solo_score),
+            "two_v_two_team_score": convert(two_v_two_team_score)
+        }
+
+        return render_template(prefix + 'rankings.html', **args)
+    
