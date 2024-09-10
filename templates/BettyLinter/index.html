@@ -104,7 +104,7 @@
         function validateCode() {
             const code = document.getElementById('codeInput').value;
             setLoaderState(true);
-            fetch('http://{{address}}/BettyLinter/validate', {
+            fetch('/BettyLinter/validate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

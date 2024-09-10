@@ -309,9 +309,6 @@ def routes():
                 for player in team2_names:
                     update_score(others, player,sc2 > sc1)
 
-
-                print(match, "--", two_v_two_team_score.get(team1, "None"), two_v_two_team_score.get(team2, "Score not available"))
-
             for player in team1_names:
                 update_score(global_ranking, player,sc1 > sc2)
             for player in team2_names:
@@ -328,6 +325,5 @@ def routes():
             "two_v_two_team_score": convert(two_v_two_team_score),
             "others": convert(others)
         }
-
         return render_template(prefix + 'rankings.html', **args)
     
