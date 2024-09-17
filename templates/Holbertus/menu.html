@@ -1,0 +1,420 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-language" content="en">
+    <meta name="description"
+        content="TUSMO is a Multiplayer Wordle game inspired by Motus! Find daily words, and play with your friends in multiplayer and battle royale mode!">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <title>TUSMO - Multiplayer Wordle</title>
+    <style>
+        *, :before, :after {
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+    --tw-pan-x: ;
+    --tw-pan-y: ;
+    --tw-pinch-zoom: ;
+    --tw-scroll-snap-strictness: proximity;
+    --tw-ordinal: ;
+    --tw-slashed-zero: ;
+    --tw-numeric-figure: ;
+    --tw-numeric-spacing: ;
+    --tw-numeric-fraction: ;
+    --tw-ring-inset: ;
+    --tw-ring-offset-width: 0px;
+    --tw-ring-offset-color: #fff;
+    --tw-ring-color: rgb(59 130 246 / .5);
+    --tw-ring-offset-shadow: 0 0 #0000;
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-shadow: 0 0 #0000;
+    --tw-shadow-colored: 0 0 #0000;
+    --tw-blur: ;
+    --tw-brightness: ;
+    --tw-contrast: ;
+    --tw-grayscale: ;
+    --tw-hue-rotate: ;
+    --tw-invert: ;
+    --tw-saturate: ;
+    --tw-sepia: ;
+    --tw-drop-shadow: ;
+    --tw-backdrop-blur: ;
+    --tw-backdrop-brightness: ;
+    --tw-backdrop-contrast: ;
+    --tw-backdrop-grayscale: ;
+    --tw-backdrop-hue-rotate: ;
+    --tw-backdrop-invert: ;
+    --tw-backdrop-opacity: ;
+    --tw-backdrop-saturate: ;
+    --tw-backdrop-sepia: ;
+}
+*, :before, :after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+}
+
+:root {
+    --prussian-blue: #003347;
+    --blue-sapphire: #005f73ff;
+    --viridian-green: #0a9396ff;
+    --middle-blue-green: #005f73;
+    --medium-champagne: #e9d8a6ff;
+    --gamboge: #ee9b00ff;
+    --alloy-orange: #ca6702ff;
+    --rust: #bb3e03ff;
+    --rufous: #ae2012ff;
+    --ruby-red: #9b2226ff;
+    --metallic-seaweed: #177E89;
+    --metallic-seaweed-50: #177E8950;
+    --midnight-green-eagle-green: #084C61;
+    --jet: #323031;
+    --permanent-geranium-lake: #DB3A34;
+    --maximum-yellow-red: #f7b735;
+    --blue-primary: var(--metallic-seaweed);
+    --blue-primary-50: var(--metallic-seaweed-50);
+    --blue-secondary: var(--middle-blue-green);
+    --blue-dark: var(--midnight-green-eagle-green);
+    --blue-darker: var(--jet);
+    --orange-primary: var(--maximum-yellow-red);
+    --red-primary: var(--permanent-geranium-lake);
+    --red-secondary: var(--rust);
+    --red-dark: var(--ruby-red);
+}
+        .logo-letter.t[data-v-7eadfcff] {
+    left: 0;
+}
+
+.logo-letter[data-v-7eadfcff]:nth-child(2n-1) {
+    box-shadow: 0 6px 0 0 var(--blue-darker);
+}
+.logo-letter[data-v-7eadfcff] {
+    position: absolute;
+    height: 4rem;
+    width: 4rem;
+    padding-top: .25rem;
+    transition: all .2s ease-in-out;
+}
+        body {
+            font-family: Avenir, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-align: center;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            background-color: var(--blue-dark);
+            display: flex;
+            flex-direction: column;
+            font-weight: 700;
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+        }
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        .content {
+            width: 320px;
+            height: 548px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            padding: .5rem;
+        }
+        .header {
+            width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 4rem;
+        }
+        .logo-container[data-v-7eadfcff] {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo[data-v-7eadfcff] {
+            font-size: 3.75rem;
+            line-height: 1;
+        }
+        .logo[data-v-7eadfcff] {
+            width: 252px;
+            position: relative;
+            height: 4rem;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu {
+            margin-bottom: .5rem;
+            justify-content: space-between;
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: center;
+        }
+        .justify-center {
+            justify-content: center;
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .flex-grow, .grow {
+            flex-grow: 1;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .flex {
+            display: flex;
+        }
+        .mt-4 {
+            margin-top: 1rem;
+        }
+        .menu-button {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--blue-dark);
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: #fff;
+            box-shadow: 0 6px 0 0 var(--blue-darker);
+            transition: all .15s ease;
+            border-radius: .5rem;
+            padding: .75rem .5rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 700;
+            margin-top: .75rem;
+        }
+        .\!justify-between {
+            justify-content: space-between !important;
+        }
+
+body {
+            margin: 0;
+            line-height: inherit
+        }
+button {
+            font-family: inherit;
+            font-size: 100%;
+            line-height: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0
+        }
+button {
+            text-transform: none
+        }
+.absolute {
+            position: absolute
+        }
+.relative {
+            position: relative
+        }
+.mt-4 {
+            margin-top: 1rem
+        }
+.ml-3 {
+            margin-left: .75rem
+        }
+.flex {
+            display: flex
+        }
+.h-full {
+            height: 100%
+        }
+.h-6 {
+            height: 1.5rem
+        }
+.w-full {
+            width: 100%
+        }
+.w-6 {
+            width: 1.5rem
+        }
+.shrink {
+            flex-shrink: 1
+        }
+.flex-col {
+            flex-direction: column
+        }
+.items-center {
+            align-items: center
+        }
+.justify-center {
+            justify-content: center
+        }
+.rounded-full {
+            border-radius: 9999px
+        }
+.rounded {
+            border-radius: .25rem
+        }
+.border-2 {
+            border-width: 2px
+        }
+.border-blue-dark {
+            border-color: var(--blue-dark)
+        }
+.bg-red-primary {
+            background-color: var(--red-primary)
+        }
+.bg-orange-primary {
+            background-color: var(--orange-primary)
+        }
+.px-5 {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem
+        }
+.pt-1 {
+            padding-top: .25rem
+        }
+.pl-6 {
+            padding-left: 1.5rem
+        }
+.pl-3 {
+            padding-left: .75rem
+        }
+.pl-1 {
+            padding-left: .25rem
+        }
+.text-left {
+            text-align: left
+        }
+.text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+.text-base {
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+.text-blue-dark {
+            color: var(--blue-dark)
+        }
+.text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity))
+        }
+.text-blue-primary {
+            color: var(--blue-primary)
+        }
+.menu {
+            margin-bottom: .5rem;
+            justify-content: space-between;
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            align-items: center
+        }
+.menu-button {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--blue-dark);
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: #fff;
+            box-shadow: 0 6px 0 0 var(--blue-darker);
+            transition: all .15s ease;
+            border-radius: .5rem;
+            padding: .75rem .5rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-weight: 700;
+            margin-top: .75rem
+        }
+.left-button {
+            border-radius: .5rem 3px 3px .5rem
+        }
+.edge-button {
+            border-radius: 0 .5rem .5rem 0;
+            border-left: 3px solid var(--blue-darker)
+        }
+    
+
+    </style>
+</head>
+
+<body></body>
+<div id="app" data-v-app="">
+    <div class="content" style="transform: scale(1.36861);">
+        <div class="header"><!---->
+            <div class="logo-container" data-v-7eadfcff="">
+                <div class="relative logo" data-v-7eadfcff="">
+                    <div class="logo-letter t bg-red-primary rounded" data-v-7eadfcff=""> T </div>
+                    <div class="logo-letter u" data-v-7eadfcff=""> U </div>
+                    <div class="logo-letter s bg-orange-primary rounded-full" data-v-7eadfcff=""> S </div>
+                    <div class="logo-letter m" data-v-7eadfcff=""> M </div>
+                    <div class="logo-letter o bg-red-primary rounded" data-v-7eadfcff=""> O </div>
+                </div>
+            </div>
+        </div>
+        <div class="menu">
+            <div class="flex flex-col mt-4 w-full grow justify-center">
+                <div class="flex w-full">
+                    <button class="menu-button flex grow left-button" onclick="window.location.href='{{ url_for('holbertus_mot_du_jour') }}';">
+                        <div class="ml-3 w-6 h-6 border-2 flex justify-center pt-1 items-center border-blue-dark rounded">
+                            <span class="text-blue-dark"><i class="fa fa-check"></i></span>
+                        </div>
+                        <div class="flex-grow text-left pl-6">Mot du jour</div>
+                    </button>
+                    <button class="menu-button edge-button shrink relative"><i
+                            class="fas fa-star text-3xl text-blue-primary"></i><span
+                            class="absolute text-white w-full h-full flex justify-center items-center pt-1">11</span></button>
+                </div>
+                <div class="flex w-full"><button class="menu-button flex grow left-button">
+                        <div
+                            class="ml-3 text-base w-6 h-6 border-2 flex justify-center pt-1 items-center border-blue-dark rounded">
+                            <span class="text-blue-dark"><i class="fa fa-check"></i></span>
+                        </div>
+                        <div class="flex-grow text-left pl-6">Suite du jour</div>
+                    </button>
+                    <button class="menu-button edge-button shrink relative"><i
+                            class="fas fa-star text-3xl text-blue-primary"></i><span
+                            class="absolute text-white w-full h-full flex justify-center items-center pt-1">11</span></button>
+                </div>
+                <button class="menu-button w-full flex !justify-between"><i class="fa fa-user px-5"></i><span
+                        class="w-full text-left pl-3">Solo</span></button>
+                <button class="menu-button w-full flex !justify-between"><i class="fa fa-users px-5"></i><span
+                        class="w-full text-left pl-1">Multijoueur</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+</body>

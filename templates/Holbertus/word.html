@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLBERTUS</title>
+    <style>
+        body {
+            font-family: Avenir, Helvetica, Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-weight: 700;
+            color: rgb(255 255 255);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #084C61;
+            height: 100vh;
+        }
+        header {
+            margin-bottom: 70px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        header div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -7px;
+            font-size: 3rem;
+            width: 3rem;
+            height:3rem;
+        }
+        header button {
+            position: absolute;
+            width: 3rem;
+            height: 3rem;
+            transform: translateX(-250px);
+            box-shadow: 0 6px 0 0 #323031;
+            border-radius: .5rem;
+        }
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+        .box {
+            width: 2.3rem;
+            height: 2.3rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-color: rgb(255 255 255);
+            border-width: 2px;
+            border-style: solid;
+        }
+        #virtual_keyboard div{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        #virtual_keyboard div div{
+            margin: 2px;
+            padding: 2px;
+            display: flex;
+            flex-direction: row;
+            height: 2.6rem;
+            width: 1.5rem;
+            border-radius: .25rem;
+            border-color: rgb(255 255 255);
+            border-width: 1px;
+            border-style: solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #alert {
+            margin: 30px;
+        }
+        .red_box {
+            box-shadow: 0 6px 0 0 #323031;
+            background-color: #DB3A34;
+            z-index: -1;
+        }
+        .yellow_circle {
+            background-color: #f7b735;
+            border-radius: 9999px;
+            box-shadow: 0 6px 0 0 #323031;
+            z-index: -1;
+        }
+        .square-border-circle {
+            width: 2.3rem;
+            height: 2.3rem;
+            position: relative;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            border-radius: 0%;
+            width: 40.8px;
+            height: 40.8px;
+        }
+
+        .square-border-circle::before {
+            width: 2.3rem;
+            height: 2.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            content: "";
+            position: absolute;
+            margin: 0;
+            width: 40.8px;
+            height: 40.8px;
+            background-color: #f7b735;
+            z-index: -1;
+            border-style: hidden;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button>home</button>
+        <div class="red_box">H</div>
+        <div>O</div>
+        <div class="yellow_circle">L</div>
+        <div>B</div>
+        <div class="red_box">E</div>
+        <div>R</div>
+        <div class="yellow_circle">T</div>
+        <div>U</div>
+        <div class="red_box">S</div>
+    </header>
+    <div class="square-border-circle"></div>
+    <div id="app">
+        {% for i in range(6) %}
+            <div class="row">
+                {% if i == 0 %}
+                <div class="box">{{ word[0] }}</div>
+            {% else %}
+                <div class="box"></div>
+            {% endif %}
+                {% for letter in word[1:] %}
+                    <div class="box"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+    </div>
+    <div id="alert"></div>
+    <div id="virtual_keyboard">
+        <div>
+            <div>A</div>
+            <div>Z</div>
+            <div>E</div>
+            <div>R</div>
+            <div>T</div>
+            <div>Y</div>
+            <div>U</div>
+            <div>I</div>
+            <div>O</div>
+            <div>P</div>
+        </div>
+        <div>
+            <div>Q</div>
+            <div>S</div>
+            <div>D</div>
+            <div>F</div>
+            <div>G</div>
+            <div>H</div>
+            <div>J</div>
+            <div>K</div>
+            <div>L</div>
+            <div>M</div>
+        </div>
+        <div>
+            <div>W</div>
+            <div>X</div>
+            <div>C</div>
+            <div>V</div>
+            <div>B</div>
+            <div>N</div>
+        </div>
+    </div>
+    <script>
+        let word = atob("{{ coded_word }}");
+        console.log(word);
+        document.addEventListener('keydown', handleKeyPress);
+
+        function handleKeyPress(event) {
+            const key = event.key.toLowerCase();
+            if (/^[a-z]$/.test(key) || key === 'backspace' || key === 'enter') { updateRow(key); }
+        }
+        let currentRow = 0;
+        let currentCol = 1;
+
+        function updateRow(key) {
+            const row = document.querySelectorAll('.row')[currentRow];
+            const boxes = row.querySelectorAll('.box');
+
+            if (key === 'backspace') {
+                if (currentCol > 0) {
+                    currentCol--;
+                    boxes[currentCol].textContent = ''; // Clear last letter
+                }
+            } else if (/^[a-z]$/.test(key)) {
+                if (currentCol < boxes.length) {
+                    boxes[currentCol].textContent = key.toUpperCase(); // Insert letter
+                    currentCol++;
+                }
+            } else if (key === 'enter') {
+                // Move to the next row if the row is full
+                if (currentCol === boxes.length) {
+                    validateWord();
+                    currentRow++;
+                    currentCol = 0;
+                    updateRow(word.toLowerCase()[0]);
+                }
+            }
+        }
+        const virtualKeys = document.querySelectorAll('#virtual_keyboard div div');
+
+        virtualKeys.forEach(keyDiv => {
+            keyDiv.addEventListener('click', () => {
+                const key = keyDiv.textContent.toLowerCase();
+                updateRow(key);
+            });
+        });
+
+        function validateWord() {
+            const row = document.querySelectorAll('.row')[currentRow];
+            const boxes = row.querySelectorAll('.box');
+
+            const guessedWord = Array.from(boxes).map(box => box.textContent).join('');
+            const letterCounts = {}; // To track letter counts in the target word
+
+            // Initialize letter counts for the target word
+            for (const letter of word) {
+                letterCounts[letter] = (letterCounts[letter] || 0) + 1;
+            }
+
+            // First pass: Mark correct letters (red)
+            Array.from(boxes).forEach((box, index) => {
+                const letter = box.textContent;
+                if (letter === word[index]) {
+                    box.classList.add('red_box'); // Add class for correct letter
+                    letterCounts[letter]--; // Decrease the count of that letter
+                }
+            });
+
+            // Second pass: Mark correct letters in the wrong position (yellow)
+            Array.from(boxes).forEach((box, index) => {
+                const letter = box.textContent;
+                if (letter !== word[index] && word.includes(letter) && letterCounts[letter] > 0) {
+                    box.classList.add('square-border-circle'); // Add class for correct letter, wrong position
+                    letterCounts[letter]--; // Decrease the count of that letter
+                } else if (letter !== word[index]) {
+                    box.classList.add('incorrect'); // Add class for wrong letter
+                }
+            });
+        }
+
+    </script>
+
+</body>
+</html>
