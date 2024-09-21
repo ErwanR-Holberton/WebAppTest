@@ -18,7 +18,7 @@
             align-items: center;
             justify-content: center;
             background-color: #084C61;
-            height: 100vh;
+            min-height: 100vh;
         }
         header {
             margin-bottom: 70px;
@@ -44,6 +44,9 @@
             box-shadow: 0 6px 0 0 #323031;
             border-radius: .5rem;
         }
+        header .red_box {
+            box-shadow: 0 6px 0 0 #323031;
+        }
         .row {
             display: flex;
             flex-direction: row;
@@ -58,11 +61,13 @@
             border-color: rgb(255 255 255);
             border-width: 2px;
             border-style: solid;
+            box-sizing: border-box;
         }
         #virtual_keyboard div{
             display: flex;
             flex-direction: row;
             justify-content: center;
+            align-items: center;
         }
         #virtual_keyboard div div{
             margin: 2px;
@@ -79,11 +84,16 @@
             align-items: center;
             justify-content: center;
         }
+        #virtual_keyboard div div.button_spe {
+            height: 1.3rem;
+            width: 3rem;
+            align-self: auto;
+            margin: 10px;
+        }
         #alert {
             margin: 30px;
         }
         .red_box {
-            box-shadow: 0 6px 0 0 #323031;
             background-color: #DB3A34;
             z-index: -1;
         }
@@ -94,34 +104,16 @@
             z-index: -1;
         }
         .square-border-circle {
-            width: 2.3rem;
-            height: 2.3rem;
             position: relative;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-            border-radius: 0%;
-            width: 40.8px;
-            height: 40.8px;
         }
 
         .square-border-circle::before {
-            width: 2.3rem;
-            height: 2.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             content: "";
             position: absolute;
-            margin: 0;
-            width: 40.8px;
-            height: 40.8px;
             background-color: #f7b735;
             z-index: -1;
-            border-style: hidden;
             border-radius: 50%;
+            inset: 0;
         }
     </style>
 </head>
@@ -138,7 +130,6 @@
         <div>U</div>
         <div class="red_box">S</div>
     </header>
-    <div class="square-border-circle"></div>
     <div id="app">
         {% for i in range(6) %}
             <div class="row">
@@ -181,12 +172,14 @@
             <div>M</div>
         </div>
         <div>
+            <div class="button_spe">⌫</div>
             <div>W</div>
             <div>X</div>
             <div>C</div>
             <div>V</div>
             <div>B</div>
             <div>N</div>
+            <div class="button_spe">↵</div>
         </div>
     </div>
     <script>
@@ -201,7 +194,7 @@
         let currentRow = 0;
         let currentCol = 1;
 
-        function updateRow(key) {
+        async function updateRow(key) {
             const row = document.querySelectorAll('.row')[currentRow];
             const boxes = row.querySelectorAll('.box');
 
@@ -218,10 +211,16 @@
             } else if (key === 'enter') {
                 // Move to the next row if the row is full
                 if (currentCol === boxes.length) {
-                    validateWord();
-                    currentRow++;
-                    currentCol = 0;
-                    updateRow(word.toLowerCase()[0]);
+                    const row = document.querySelectorAll('.row')[currentRow];
+                    const boxes = row.querySelectorAll('.box');
+                    const guessedWord = Array.from(boxes).map(box => box.textContent).join('');
+                    if (await checkWord(guessedWord)) {
+                        console.log(guessedWord);
+                        validateWord();
+                        currentRow++;
+                        currentCol = 0;
+                        updateRow(word.toLowerCase()[0]);
+                    }
                 }
             }
         }
@@ -265,6 +264,30 @@
                     box.classList.add('incorrect'); // Add class for wrong letter
                 }
             });
+        }
+
+        async function checkWord(word) {
+
+            try {
+                const response = await fetch('/Holbertus/check_word', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ word: word })
+                });
+
+                const data = await response.text();
+                console.log(data);
+                
+                if (response.ok && data.trim().toLowerCase() === "ok") {
+                    return true;
+                } else {
+                    document.getElementById('alert').innerHTML = data;
+                    return false;
+                }
+            } catch (error) {
+                document.getElementById('alert').innerHTML = error.message;
+                return false;
+            }
         }
 
     </script>
