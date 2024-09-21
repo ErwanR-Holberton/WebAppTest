@@ -198,7 +198,7 @@
             const row = document.querySelectorAll('.row')[currentRow];
             const boxes = row.querySelectorAll('.box');
 
-            if (key === 'backspace') {
+            if (key === 'backspace' || key === '⌫') {
                 if (currentCol > 0) {
                     currentCol--;
                     boxes[currentCol].textContent = ''; // Clear last letter
@@ -208,7 +208,7 @@
                     boxes[currentCol].textContent = key.toUpperCase(); // Insert letter
                     currentCol++;
                 }
-            } else if (key === 'enter') {
+            } else if (key === 'enter' || key === '↵') {
                 // Move to the next row if the row is full
                 if (currentCol === boxes.length) {
                     const row = document.querySelectorAll('.row')[currentRow];
@@ -229,6 +229,7 @@
         virtualKeys.forEach(keyDiv => {
             keyDiv.addEventListener('click', () => {
                 const key = keyDiv.textContent.toLowerCase();
+                console.log(key);
                 updateRow(key);
             });
         });
