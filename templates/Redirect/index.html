@@ -6,8 +6,15 @@
     <title>URL Redirector</title>
 </head>
 <body>
+    <a href="/Redirect/get_url" class="button">URL1</a>
+    <a href="/Redirect/get_url2" class="button">URL2</a>
     <h1>Save a URL</h1>
     <form method="POST" action="/Redirect/save_url">
+        <label for="url">Enter URL:</label>
+        <input type="url" id="url" name="url" required>
+        <button type="submit">Save URL</button>
+    </form>
+    <form method="POST" action="/Redirect/save_url2">
         <label for="url">Enter URL:</label>
         <input type="url" id="url" name="url" required>
         <button type="submit">Save URL</button>
