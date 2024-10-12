@@ -45,12 +45,27 @@
         a:hover {
             color: #0056b3;
         }
+
+        /* Styles for the dots */
+        .status-dot {
+        height: 15px;
+        width: 15px;
+        border-radius: 50%;
+        display: inline-block;
+        }
+        .online {
+        background-color: rgb(0, 255, 0);
+        }
+        .offline {
+        background-color: rgb(255, 0, 0);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>The Best Card Game</h1>
         <ul>
+            <li><a href="https://lemming-national-anemone.ngrok-free.app" target="_blank">Website</a> <span id="statusDot" class="status-dot offline"></span></li>
             <li><a href="https://docs.google.com/document/d/1Z-uCY9LVMZ6E2vezMUmB6P6tgEPMNlyUocIEjB5x4CU/edit?usp=sharing" target="_blank">Liste d'assets de Keke</a></li>
             <li><a href="https://docs.google.com/document/d/1FxB3EmtHAtUiCsz1Mc4CLTMda84LgtINAXFCrbqSfLw/edit?usp=sharing" target="_blank">Boite à idée</a></li>
             <li><a href="https://github.com/PellissardKevin/basic_dummy_fight_VR" target="_blank">Github Repo unity</a></li>
@@ -58,8 +73,38 @@
             <li><a href="https://www.meshy.ai/?utm_source=YHR99B" target="_blank">Meshi</a></li>
             <li><a href="https://docs.google.com/spreadsheets/d/1RwLoTVjsGFoq--r6jnkYEgu5_83y8Xola8tzu7vpRkQ/edit?gid=0#gid=0" target="_blank">Cards</a></li>
             <li><a href="https://www.swisstransfer.com/d/f235ddaa-2332-4a84-8265-0348e4ea93a3" target="_blank">Images</a></li>
-            
+
         </ul>
     </div>
 </body>
+<script>
+    // Function to check the route status
+    async function checkRouteStatus() {
+      const statusDot = document.getElementById('statusDot');
+      try {
+        // Replace 'your-api-route-url' with the actual route you want to check
+        const response = await fetch('http://lemming-national-anemone.ngrok-free.app/status');
+
+        if (response.ok) {
+          // If the response is ok, set the dot to green (online)
+          statusDot.classList.remove('offline');
+          statusDot.classList.add('online');
+        } else {
+          // If the response is not ok, set the dot to red (offline)
+          statusDot.classList.remove('online');
+          statusDot.classList.add('offline');
+        }
+      } catch (error) {
+        // If there's an error (e.g., network issue), set the dot to red (offline)
+        statusDot.classList.remove('online');
+        statusDot.classList.add('offline');
+      }
+    }
+
+    // Check the route status every 5 seconds
+    setInterval(checkRouteStatus, 5000);
+
+    // Initial check
+    checkRouteStatus();
+  </script>
 </html>
