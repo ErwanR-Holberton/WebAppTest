@@ -1,2 +1,5 @@
 __pycache__
 DB_CONFIG.py
+werkzeug
+skip1000-100.txt
+src.txt
